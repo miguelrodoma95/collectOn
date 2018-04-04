@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "226614852849",
+    "firebase_url": "https://collecton-6a02b.firebaseio.com",
+    "project_id": "collecton-6a02b",
+    "storage_bucket": "collecton-6a02b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226614852849:android:717d3ee683a9390e",
+        "android_client_info": {
+          "package_name": "com.myapp.miguel.collectonapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226614852849-6sqtstpucb80fjg4g8rnvtbj19mfa8no.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myapp.miguel.collectonapp",
+            "certificate_hash": "b592a3f5423d2d3c98ba97f8f16c6d096f7abb15"
+          }
+        },
+        {
+          "client_id": "226614852849-2jmbmoa3ossks9mm180nl2p995b7bh8s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTIHwGQTvzqCVwdmSTCEZA8rdi8dK5vlg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226614852849-2jmbmoa3ossks9mm180nl2p995b7bh8s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "226614852849-42cg6sdp25f7fbknp9vvn6pvokt3luqa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.collecton.ios"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

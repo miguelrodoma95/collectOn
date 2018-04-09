@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Facebook"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Facebook" />
+        <item
+            android:id="@+id/Twitter"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Twitter" />
+        <item
+            android:id="@+id/Instagram"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Instagram" />
+    </group>
+
+    <item android:title="About CollectOn">
+        <menu>
+
+            <item
+                android:id="@+id/About"
+                android:icon="@drawable/ic_menu_send"
+                android:title="About" />
+            <item
+                android:id="@+id/Logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Logout" />
+
+        </menu>
+    </item>
+
+</menu>

@@ -54,14 +54,14 @@ public class FeatureActivity extends AppCompatActivity
 //        });
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
 
-        final Fragment homeFragment = new ExchangeFragment();
-        final Fragment searchFragment = new CommunityFragment();
-        final Fragment cameraFragment = new CompleteListFragment();
-        final Fragment favoritesFragment = new MyCollectionFragment();
+        final Fragment completeListFragment = new CompleteListFragment();
+        final Fragment myCollectionFragment = new MyCollectionFragment();
+        final Fragment exchangeFragment = new ExchangeFragment();
+        final Fragment communityFragment = new CommunityFragment();
 
         if (savedInstanceState == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentContainer, homeFragment).commit();
+            fragmentTransaction.replace(R.id.fragmentContainer, completeListFragment).commit();
         }
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
@@ -74,16 +74,16 @@ public class FeatureActivity extends AppCompatActivity
 
                 if (item.getItemId() == R.id.navigation_home) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainer, homeFragment).commit();
+                    fragmentTransaction.replace(R.id.fragmentContainer, completeListFragment).commit();
                 } else if (item.getItemId() == R.id.navigation_dashboard) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainer, searchFragment).commit();
+                    fragmentTransaction.replace(R.id.fragmentContainer, myCollectionFragment).commit();
                 } else if (item.getItemId() == R.id.navigation_notifications) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainer, cameraFragment).commit();
+                    fragmentTransaction.replace(R.id.fragmentContainer, exchangeFragment).commit();
                 } else if (item.getItemId() == R.id.navigation_community) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainer, favoritesFragment).commit();
+                    fragmentTransaction.replace(R.id.fragmentContainer, communityFragment).commit();
                 }
                 return true;
             }

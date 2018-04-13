@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.myapp.miguel.collectonapp.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.facebook.GraphRequest.TAG;
 
@@ -37,7 +38,9 @@ public class CompleteListFragment extends Fragment {
     private DatabaseReference myRef;
     private ListView mListView;
     private ArrayList<String> collectionArray;
+    private ArrayList<String> collectionImages;
     private String collectionName;
+    private String collectionImagesURL;
     private ListView mainListView;
     int[] IMAGES = {R.drawable.dccomics, R.drawable.disney, R.drawable.hotwheels, R.drawable.funkopop, R.drawable.got, R.drawable.hotwheels, R.drawable.marvel, R.drawable.nintendo, R.drawable.starwaarslogo};
 
@@ -83,17 +86,23 @@ public class CompleteListFragment extends Fragment {
 
     private void showData(DataSnapshot dataSnapshot) {
         collectionArray = new ArrayList<String>();
+        collectionImages = new ArrayList<String>();
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
             collectionName = ds.getKey();
+            //collectionImagesURL = myRef.child("Categories").toString();
+            collectionImagesURL = dataSnapshot.child(collectionName).child("Logo").getValue().toString();
+
 
             //display all the information
             Log.d(TAG, "Collection name: " + collectionName);
+            Log.d("url de " + collectionName, " : " + collectionImagesURL);
             collectionArray.add(collectionName);
+            collectionImages.add(collectionImagesURL);
         }
 
         CustomAdapter customAdapter = new CustomAdapter();
-        mainListView.setAdapter(customAdapter);
+        mainListView.setAdapter(customAdapter);  //Custom ListView. Todo: onClickListener que me mande a Fragmento con la info del tema seleccionado.
 
 //        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,collectionArray);
 //        mainListView.setAdapter(adapter);
@@ -136,13 +145,19 @@ public class CompleteListFragment extends Fragment {
             ImageView imageView = view.findViewById(R.id.imageView);
             TextView textView = view.findViewById(R.id.textTema);
 
-            String[] stringArray = new String[collectionArray.size()];
-            stringArray = collectionArray.toArray(stringArray);
+            String[] stringCollectionArray = new String[collectionArray.size()];
+            stringCollectionArray = collectionArray.toArray(stringCollectionArray);
+            Log.d("array de temas", String.valueOf(stringCollectionArray));
 
-            for(String s : stringArray)
+            String[] imageURLArray = new String[collectionImages.size()];
+            imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo. Todo: usar picasso para despelgarlos como imagenes.
+            Log.d("array de url", String.valueOf(imageURLArray));
+            //System.out.println("arr: " + Arrays.toString(imageURLArray));
+
+            for(String s : stringCollectionArray)
 
             imageView.setImageResource(IMAGES[position]);
-            textView.setText(stringArray[position]);
+            textView.setText(stringCollectionArray[position]);
             return view;
         }
     }

@@ -20,12 +20,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
 import com.myapp.miguel.collectonapp.mainFragments.MyCollectionFragment;
 import com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment;
 import com.myapp.miguel.collectonapp.mainFragments.CommunityFragment;
+import com.myapp.miguel.collectonapp.completeListFragments.CollectionsFragment;
+
 
 public class FeatureActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,12 +40,14 @@ public class FeatureActivity extends AppCompatActivity
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {

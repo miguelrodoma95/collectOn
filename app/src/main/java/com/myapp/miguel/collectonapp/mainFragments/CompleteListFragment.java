@@ -1,6 +1,9 @@
 package com.myapp.miguel.collectonapp.mainFragments;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import com.myapp.miguel.collectonapp.R;
 import com.myapp.miguel.collectonapp.completeListFragments.CollectionsFragment;
 import com.squareup.picasso.Picasso;
@@ -49,6 +53,7 @@ public class CompleteListFragment extends Fragment {
     private ListView mListView;
     private ArrayList<String> collectionArray;
     private ArrayList<String> collectionImages;
+    private SharedPreferences sharedPreferences;
     private String collectionName;
     String[] stringCollectionArray;
     private String collectionImagesURL;
@@ -70,6 +75,7 @@ public class CompleteListFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
         mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -123,20 +129,26 @@ public class CompleteListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.fragmentContainer, collectionsFragment).commit();  //cambio de fragment.
 
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainer, collectionsFragment).commit();
+                Intent collectionsIntent = new Intent(getActivity(), CollectionsActivity.class);
+                startActivity(collectionsIntent); //Fragment a Activity con intent
 
-                //Todo: save selection to go on to themes -> COLLECTIONS -> sub-collections -> Articles.
+                //Todo: save selection to go on to // themes -> COLLECTIONS -> sub-collections -> Articles//
+
+                String selectedTheme = stringCollectionArray[i];
+                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
+//                String selectedThemeTry = sharedPreferences.getString("selectedTheme", "error");// prueba de sharedPref
+//                Log.d("selecionaste", selectedThemeTry);
 
 
-                Log.i("person selected", stringCollectionArray[i]);
-                Toast.makeText(getActivity(), (CharSequence) stringCollectionArray[i] + " SELECTED", Toast.LENGTH_SHORT).show();
+                //Log.i("person selected", selectedTheme);
+                Toast.makeText(getActivity(), (CharSequence) selectedTheme + " SELECTED", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     class CustomAdapter extends BaseAdapter {
 

@@ -32,8 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.myapp.miguel.collectonapp.CollectionsListActivity;
 import com.myapp.miguel.collectonapp.R;
-import com.myapp.miguel.collectonapp.completeListFragments.CollectionsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,14 +43,12 @@ import static com.facebook.GraphRequest.TAG;
 
 public class CompleteListFragment extends Fragment {
 
-    final Fragment collectionsFragment = new CollectionsFragment();
 
     private FirebaseDatabase database;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference myRef;
     private ImageView imageView;
-    private ListView mListView;
     private ArrayList<String> collectionArray;
     private ArrayList<String> collectionImages;
     private SharedPreferences sharedPreferences;
@@ -112,7 +110,6 @@ public class CompleteListFragment extends Fragment {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
             collectionName = ds.getKey();
-            //collectionImagesURL = myRef.child("Categories").toString();
             collectionImagesURL = dataSnapshot.child(collectionName).child("Logo").getValue().toString();
 
             ///
@@ -133,18 +130,14 @@ public class CompleteListFragment extends Fragment {
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.fragmentContainer, collectionsFragment).commit();  //cambio de fragment.
 
-                Intent collectionsIntent = new Intent(getActivity(), CollectionsActivity.class);
+                Intent collectionsIntent = new Intent(getActivity(), CollectionsListActivity.class);
                 startActivity(collectionsIntent); //Fragment a Activity con intent
 
                 //Todo: save selection to go on to // themes -> COLLECTIONS -> sub-collections -> Articles//
 
                 String selectedTheme = stringCollectionArray[i];
                 sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
-//                String selectedThemeTry = sharedPreferences.getString("selectedTheme", "error");// prueba de sharedPref
-//                Log.d("selecionaste", selectedThemeTry);
 
-
-                //Log.i("person selected", selectedTheme);
                 Toast.makeText(getActivity(), (CharSequence) selectedTheme + " SELECTED", Toast.LENGTH_SHORT).show();
             }
         });

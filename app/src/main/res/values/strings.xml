@@ -9,4 +9,5 @@
 
     <string name="facebook_app_id">148446905857694</string>
     <string name="fb_login_protocol_scheme">fb148446905857694</string>
+    <string name="title_activity_collections_list">CollectionsListActivity</string>
 </resources>

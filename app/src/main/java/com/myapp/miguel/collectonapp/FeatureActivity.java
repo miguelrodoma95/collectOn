@@ -27,7 +27,6 @@ import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
 import com.myapp.miguel.collectonapp.mainFragments.MyCollectionFragment;
 import com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment;
 import com.myapp.miguel.collectonapp.mainFragments.CommunityFragment;
-import com.myapp.miguel.collectonapp.completeListFragments.CollectionsFragment;
 
 
 public class FeatureActivity extends AppCompatActivity
@@ -39,15 +38,13 @@ public class FeatureActivity extends AppCompatActivity
     NavigationView navigationView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature);
 
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +54,15 @@ public class FeatureActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
 
         final Fragment completeListFragment = new CompleteListFragment();
@@ -93,15 +99,6 @@ public class FeatureActivity extends AppCompatActivity
                 return true;
             }
         });
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override

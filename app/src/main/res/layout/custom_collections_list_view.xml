@@ -13,6 +13,6 @@
         android:layout_marginEnd="15dp"
         android:layout_marginTop="20dp"
         android:text="Tema"
-        android:textColor="@color/com_facebook_messenger_blue"
+        android:textColor="@color/white"
         android:textSize="20sp" />
 </RelativeLayout>

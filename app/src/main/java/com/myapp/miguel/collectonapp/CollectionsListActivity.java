@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -103,47 +104,39 @@ public class CollectionsListActivity extends AppCompatActivity
         collectionArray = new ArrayList<String>();
         myRef = database.getReference(selectedTheme);
         for(DataSnapshot ds : dataSnapshot.child(selectedTheme).child("Categories").getChildren()){
+
             collectionsListView = findViewById(R.id.collectionsListView);
             String collectionName = ds.getKey();
 
-
-            ///
             Log.d(TAG, "Lista de colecciones " + collectionName);
+
             collectionArray.add(collectionName);
         }
         Log.d("Colecciones array", String.valueOf(collectionArray));
+
         stringCollectionArray = new String[collectionArray.size()];
         stringCollectionArray = collectionArray.toArray(stringCollectionArray);
 
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stringCollectionArray);
-//        collectionsListView.setAdapter(arrayAdapter);
-
         CustomAdapter customAdapter = new CustomAdapter();
         collectionsListView.setAdapter(customAdapter);  //Custom ListView. Todo: onClickListener que me mande a Fragmento con la info del tema seleccionado.
-//
-//        mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-////                FragmentManager fragmentManager = getFragmentManager();
-////                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-////                fragmentTransaction.replace(R.id.fragmentContainer, collectionsFragment).commit();  //cambio de fragment.
-//
-//                Intent collectionsIntent = new Intent(getActivity(), CollectionsActivity.class);
+
+        collectionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+//                Intent collectionsIntent = new Intent(getActivity(), CollectionsListActivity.class);
 //                startActivity(collectionsIntent); //Fragment a Activity con intent
-//
-//                //Todo: save selection to go on to // themes -> COLLECTIONS -> sub-collections -> Articles//
-//
-//                String selectedTheme = stringCollectionArray[i];
-//                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
-////                String selectedThemeTry = sharedPreferences.getString("selectedTheme", "error");// prueba de sharedPref
-////                Log.d("selecionaste", selectedThemeTry);
-//
-//
-//                //Log.i("person selected", selectedTheme);
-//                Toast.makeText(getActivity(), (CharSequence) selectedTheme + " SELECTED", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
+                //Todo: save selection to go on to // themes -> COLLECTIONS -> sub-collections -> Articles//
+
+                String selectedCollection = stringCollectionArray[i];
+
+                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
+                sharedPreferences.edit().putString("selectedCollection", selectedCollection).apply();
+
+                Toast.makeText(CollectionsListActivity.this, (CharSequence) selectedCollection + " SELECTED", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

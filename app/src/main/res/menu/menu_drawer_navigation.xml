@@ -6,15 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/Facebook"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/com_facebook_button_icon"
             android:title="Facebook" />
         <item
             android:id="@+id/Twitter"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/com_facebook_button_icon_blue"
             android:title="Twitter" />
         <item
             android:id="@+id/Instagram"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/com_facebook_button_icon_blue"
             android:title="Instagram" />
     </group>
 
@@ -23,11 +23,11 @@
 
             <item
                 android:id="@+id/About"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/com_facebook_button_icon_blue"
                 android:title="About" />
             <item
                 android:id="@+id/Logout"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_logout_icon"
                 android:title="Logout" />
 
         </menu>

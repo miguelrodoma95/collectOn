@@ -4,5 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="collectOnBackground">#262626</color>
-    <color name="white">#FFFFFF</color>
+    <color name="white">#ffffff</color>
+    <color name="BlueBottomNav">#3F51B5</color>
+    <color name="BlueButton">#28448A </color>
+    <color name="SkyBlueButton">#007EC9  </color>
+    <color name="RedButton">#960000  </color>
+    <color name="GreyMenu">#8e8e8e</color>
+
+
+
 </resources>

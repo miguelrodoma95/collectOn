@@ -22,6 +22,6 @@
         android:layout_marginStart="49dp"
         android:layout_toEndOf="@+id/imageView"
         android:text="Tema"
-        android:textColor="@color/com_facebook_messenger_blue"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 </RelativeLayout>

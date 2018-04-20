@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,16 +8,76 @@
     android:background="@color/collectOnBackground"
     tools:context="com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EXCHANGE"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/logo" />
+
+        <Button
+            android:id="@+id/buttonBuy"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_below="@id/imageView4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="60dp"
+            android:layout_weight="2"
+            android:background="@drawable/rounded_blue_button"
+            android:text="Buy"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/buttonSell"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_below="@+id/buttonBuy"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="2"
+            android:background="@drawable/rounded_sky_blue_button"
+            android:text="Sell"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/buttonChange"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_below="@+id/buttonSell"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="2"
+            android:background="@drawable/rounded_red_button"
+            android:text="Trade"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </RelativeLayout>
+
+
+
+</android.support.v4.widget.NestedScrollView>

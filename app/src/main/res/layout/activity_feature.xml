@@ -28,7 +28,7 @@
             android:background="@color/colorPrimary"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
-            app:itemBackground="@color/colorPrimaryDark"
+            app:itemBackground="@color/BlueBottomNav"
             app:menu="@menu/menu_bottom_navigation" />
 
     </RelativeLayout>
@@ -46,4 +46,5 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_feature_activity"
         app:menu="@menu/menu_drawer_navigation" />
+
 </android.support.v4.widget.DrawerLayout>

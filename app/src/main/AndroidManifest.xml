@@ -13,7 +13,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Login_Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,16 +33,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FeatureActivity"
+            android:name=".Feature_Activity"
             android:label="Collect On"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".CollectionsListActivity"
+            android:name=".CollectionsList_Activity"
             android:label="@string/title_activity_collections_list"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ItemsList_Activity"
+            android:label="@string/title_activity_items_list_"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -11,8 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
@@ -29,7 +26,7 @@ import com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment;
 import com.myapp.miguel.collectonapp.mainFragments.CommunityFragment;
 
 
-public class FeatureActivity extends AppCompatActivity
+public class Feature_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
@@ -110,14 +107,6 @@ public class FeatureActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-    //@Override
-    //public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        //return true;
-    //}
-//
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -165,7 +154,7 @@ public class FeatureActivity extends AppCompatActivity
     public void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        Intent loginIntent = new Intent(this, LoginActivity.class);
+        Intent loginIntent = new Intent(this, Login_Activity.class);
         startActivity(loginIntent);
         finish();
     }

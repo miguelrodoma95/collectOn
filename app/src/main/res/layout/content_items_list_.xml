@@ -5,21 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.myapp.miguel.collectonapp.CollectionsList_Activity"
-    >
-
-    <include
-        layout="@layout/app_bar_feature_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
-
-    </RelativeLayout>
-
-
+    tools:context="com.myapp.miguel.collectonapp.ItemsList_Activity"
+    tools:showIn="@layout/app_bar_items_list_">
 
 </android.support.constraint.ConstraintLayout>

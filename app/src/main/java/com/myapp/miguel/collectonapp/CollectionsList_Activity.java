@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,13 +13,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,17 +28,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import static com.facebook.GraphRequest.TAG;
 
-public class CollectionsListActivity extends AppCompatActivity
+public class CollectionsList_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    BottomNavigationView bottomNavigationView;
-    DrawerLayout drawer;
     Toolbar toolbar = null;
     NavigationView navigationView;
     SharedPreferences sharedPreferences;
@@ -72,6 +64,7 @@ public class CollectionsListActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         selectedTheme = sharedPreferences.getString("selectedTheme", "error");
         database = FirebaseDatabase.getInstance();
@@ -79,8 +72,6 @@ public class CollectionsListActivity extends AppCompatActivity
 
         Log.d("selected theme", selectedTheme);
 
-//        getActionBar().setTitle(selectedTheme);
-//        getSupportActionBar().setTitle(selectedTheme);
 
         ((AppCompatActivity)this).getSupportActionBar().setTitle(selectedTheme + " Collections");
 
@@ -124,17 +115,17 @@ public class CollectionsListActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-//                Intent collectionsIntent = new Intent(getActivity(), CollectionsListActivity.class);
-//                startActivity(collectionsIntent); //Fragment a Activity con intent
+                Intent itemsIntent = new Intent(CollectionsList_Activity.this, ItemsList_Activity.class);
+                startActivity(itemsIntent); //Fragment a Activity con intent
 
-                //Todo: save selection to go on to // themes -> COLLECTIONS -> sub-collections -> Articles//
+                //Todo: save selection to go on to // themes -> collection -> SUB-COLLECTIONS&ARTICLES//
 
                 String selectedCollection = stringCollectionArray[i];
 
                 sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
                 sharedPreferences.edit().putString("selectedCollection", selectedCollection).apply();
 
-                Toast.makeText(CollectionsListActivity.this, (CharSequence) selectedCollection + " SELECTED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CollectionsList_Activity.this, (CharSequence) selectedCollection + " SELECTED", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -182,7 +173,7 @@ public class CollectionsListActivity extends AppCompatActivity
     public void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        Intent loginIntent = new Intent(this, LoginActivity.class);
+        Intent loginIntent = new Intent(this, Login_Activity.class);
         startActivity(loginIntent);
         finish();
     }

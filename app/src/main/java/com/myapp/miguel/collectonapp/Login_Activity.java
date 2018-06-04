@@ -1,15 +1,11 @@
 package com.myapp.miguel.collectonapp;
 
 
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
-import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -17,7 +13,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * Demonstrate Firebase Authentication using a Facebook access token.
  */
-public class LoginActivity extends AppCompatActivity {
+public class Login_Activity extends AppCompatActivity {
 
     private static final String TAG = "FacebookLogin";
     private FirebaseAuth mAuth;
@@ -121,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(Login_Activity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -135,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent intent = new Intent(LoginActivity.this, FeatureActivity.class);
+            Intent intent = new Intent(Login_Activity.this, Feature_Activity.class);
             startActivity(intent);
             finish();
         }

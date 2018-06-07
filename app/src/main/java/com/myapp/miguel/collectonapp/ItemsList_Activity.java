@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -43,9 +45,12 @@ public class ItemsList_Activity extends AppCompatActivity
     private DatabaseReference myRef;
     private FirebaseDatabase database;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String selectedCollection, selectecTheme;
+    private String selectedCollection, selectecTheme, collectionImagesURL;
     private SharedPreferences sharedPreferences;
     private ArrayList<Item> collectionList;
+    private ArrayList<String> collectionImages;
+    private int x;
+
     //
     private ListView lvCollectionHeader;
     //
@@ -158,9 +163,7 @@ public class ItemsList_Activity extends AppCompatActivity
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         selectedCollection = sharedPreferences.getString("selectedCollection", " ");
         selectecTheme = sharedPreferences.getString("selectedTheme", " ");
-        Log.d("selectedCollection", selectedCollection);
-        Log.d("selectedTheme", selectecTheme);
-
+        collectionImages = new ArrayList<String>();
         myRef = database.getReference(selectedCollection);
 
         //for statement por si hay colecciones dentro de la colección
@@ -168,22 +171,27 @@ public class ItemsList_Activity extends AppCompatActivity
             if(dataSnapshot.exists()){
                 String subCollection = ds.getKey();
                 collectionList.add(new SectionItem(subCollection));
-
                 Log.d("subCollection", subCollection);
 
+                collectionImages.add("https://tpc.googlesyndication.com/simgad/16094122936629946910");
                 for (DataSnapshot dsItem : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").child(subCollection).child("collection").getChildren()){
+
                     String subItem = String.valueOf(dsItem.child("Name").getValue());
                     collectionList.add(new EntryItem(subItem));
-                    //Todo: agregar url
+
+                    collectionImagesURL = String.valueOf(dsItem.child("ImageURL").getValue());
+                    collectionImages.add(collectionImagesURL);
 
                     Log.d("subCollectionItems", subItem);
+                    Log.d("subCollectionURL", collectionImagesURL);
+
                 }
 
                 // set adapter
                 final CountryAdapter adapter = new CountryAdapter(this, collectionList);
                 lvCollectionHeader.setAdapter(adapter);
                 lvCollectionHeader.setTextFilterEnabled(true);
-
+                x++;
             }
         }
 
@@ -242,7 +250,7 @@ public class ItemsList_Activity extends AppCompatActivity
         public String getTitle() {
             return title;
         }
-
+        
         @Override
         public boolean isSection() {
             return true;
@@ -274,6 +282,8 @@ public class ItemsList_Activity extends AppCompatActivity
         private Context context;
         private ArrayList<Item> item;
         private ArrayList<Item> originalItem;
+        private ImageView itemImg;
+
 
         public CountryAdapter() {
             super();
@@ -302,7 +312,9 @@ public class ItemsList_Activity extends AppCompatActivity
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             if (item.get(position).isSection()) {
                 // if section header
                 convertView = inflater.inflate(R.layout.layout_section, parent, false);
@@ -312,11 +324,18 @@ public class ItemsList_Activity extends AppCompatActivity
             else
             {
                 // if item
+                String[] imageURLArray = new String[collectionImages.size()];
+                imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo.
+                Log.d("arrayURL", String.valueOf(imageURLArray));
+
                 convertView = inflater.inflate(R.layout.layout_item, parent, false);
                 TextView tvItemTitle = (TextView) convertView.findViewById(R.id.tvItemTitle);
                 tvItemTitle.setText(((EntryItem) item.get(position)).getTitle());
-            }
 
+                //Todo: imagenes se desfasa por los headers 
+                itemImg = (ImageView) convertView.findViewById(R.id.itemImg);
+                Picasso.get().load(imageURLArray[position]).into(itemImg); //load image form URL arrays
+            }
             return convertView;
         }
     }

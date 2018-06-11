@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,9 +72,6 @@ public class CollectionsList_Activity extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
-        Log.d("selected theme", selectedTheme);
-
-
         ((AppCompatActivity)this).getSupportActionBar().setTitle(selectedTheme + " Collections");
 
         myRef.addValueEventListener(new ValueEventListener() {
@@ -99,11 +98,8 @@ public class CollectionsList_Activity extends AppCompatActivity
             collectionsListView = findViewById(R.id.collectionsListView);
             String collectionName = ds.getKey();
 
-            Log.d(TAG, "Lista de colecciones " + collectionName);
-
             collectionArray.add(collectionName);
         }
-        Log.d("Colecciones array", String.valueOf(collectionArray));
 
         stringCollectionArray = new String[collectionArray.size()];
         stringCollectionArray = collectionArray.toArray(stringCollectionArray);
@@ -118,14 +114,10 @@ public class CollectionsList_Activity extends AppCompatActivity
                 Intent itemsIntent = new Intent(CollectionsList_Activity.this, ItemsList_Activity.class);
                 startActivity(itemsIntent); //Fragment a Activity con intent
 
-                //Todo: save selection to go on to // themes -> collection -> SUB-COLLECTIONS&ARTICLES//
-
                 String selectedCollection = stringCollectionArray[i];
 
                 sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
                 sharedPreferences.edit().putString("selectedCollection", selectedCollection).apply();
-
-                Toast.makeText(CollectionsList_Activity.this, (CharSequence) selectedCollection + " SELECTED", Toast.LENGTH_SHORT).show();
             }
         });
     }

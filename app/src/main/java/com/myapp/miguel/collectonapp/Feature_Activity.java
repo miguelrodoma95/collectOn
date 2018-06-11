@@ -10,16 +10,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
 import com.myapp.miguel.collectonapp.mainFragments.MyCollectionFragment;
 import com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment;
@@ -34,23 +43,64 @@ public class Feature_Activity extends AppCompatActivity
     Toolbar toolbar = null;
     NavigationView navigationView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    Fragment completeListFragment, myCollectionFragment, exchangeFragment,communityFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature);
 
+        drawerAndToolbarViewContents();
+
+        completeListFragment = new CompleteListFragment();
+        myCollectionFragment = new MyCollectionFragment();
+        exchangeFragment = new ExchangeFragment();
+        communityFragment = new CommunityFragment();
+
+        if (savedInstanceState == null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainer, completeListFragment).commit();
+        }
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        bottomNavigationBar();
+
+        userCollectionsFirebaseDatabase();
+    }
+
+    private void userCollectionsFirebaseDatabase() {
+
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
+                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
+                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
+                .build();
+        FirebaseApp.initializeApp(this, options, "secondary");
+
+        FirebaseApp app =FirebaseApp.getInstance("secondary");
+        FirebaseDatabase secondaryDatabase = FirebaseDatabase.getInstance(app);
+
+        DatabaseReference secondRef = secondaryDatabase.getReference();
+
+        secondRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Log.d("PruebaSecondF", ds.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void drawerAndToolbarViewContents() {
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,17 +112,9 @@ public class Feature_Activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
 
-        final Fragment completeListFragment = new CompleteListFragment();
-        final Fragment myCollectionFragment = new MyCollectionFragment();
-        final Fragment exchangeFragment = new ExchangeFragment();
-        final Fragment communityFragment = new CommunityFragment();
+    }
 
-        if (savedInstanceState == null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentContainer, completeListFragment).commit();
-        }
-
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+    private void bottomNavigationBar() {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -107,6 +149,7 @@ public class Feature_Activity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

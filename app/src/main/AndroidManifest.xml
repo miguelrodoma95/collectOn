@@ -42,7 +42,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ItemsList_Activity"
-            android:label="@string/title_activity_items_list_"
+            android:label="Collection"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

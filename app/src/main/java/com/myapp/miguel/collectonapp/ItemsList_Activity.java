@@ -3,6 +3,7 @@ package com.myapp.miguel.collectonapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -49,8 +50,8 @@ public class ItemsList_Activity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private ArrayList<Item> collectionList;
     private ArrayList<String> collectionImages;
-    private int x;
-
+    private ImageView collectionBanner;
+    private TextView collectionName;
     //
     private ListView lvCollectionHeader;
     //
@@ -60,22 +61,15 @@ public class ItemsList_Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_list_);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        collectionList = new ArrayList<ItemsList_Activity.Item>();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        selectedCollection = sharedPreferences.getString("selectedCollection", " ");
+        selectecTheme = sharedPreferences.getString("selectedTheme", " ");
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
+        setViewElements();
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -91,10 +85,27 @@ public class ItemsList_Activity extends AppCompatActivity
                 Log.w("Failed to read value.", error.toException());
             }
         });
+    }
 
+    private void setViewElements() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ((AppCompatActivity)this).getSupportActionBar().setTitle(selectecTheme + " - " + selectedCollection  + "  Collection");
+
+        collectionBanner = findViewById(R.id.collectionBanner);
+        collectionName = findViewById(R.id.collectionName);
         lvCollectionHeader = (ListView) findViewById(R.id.lvCountry);
-
-        collectionList = new ArrayList<ItemsList_Activity.Item>();
     }
 
     @Override
@@ -107,29 +118,6 @@ public class ItemsList_Activity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.items_list_, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle menu_bottom_navigation view item clicks here.
@@ -148,9 +136,6 @@ public class ItemsList_Activity extends AppCompatActivity
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 signOut();
                 break;
-            // this is done, now let us go and intialise the home page.
-            // after this lets start copying the above.
-            // FOLLOW MEEEEE>>>
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -160,66 +145,51 @@ public class ItemsList_Activity extends AppCompatActivity
 
     private void showData(DataSnapshot dataSnapshot) {
         //countryList = new ArrayList<Item>();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        selectedCollection = sharedPreferences.getString("selectedCollection", " ");
-        selectecTheme = sharedPreferences.getString("selectedTheme", " ");
+
         collectionImages = new ArrayList<String>();
         myRef = database.getReference(selectedCollection);
+
+        String bannerURL = dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("ImageBox").getValue().toString();
+        collectionName.setText(selectedCollection);
+        Picasso.get().load(bannerURL).into(collectionBanner); //load image form URL arrays
 
         //for statement por si hay colecciones dentro de la colección
         for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").getChildren()){
             if(dataSnapshot.exists()){
+
                 String subCollection = ds.getKey();
                 collectionList.add(new SectionItem(subCollection));
-                Log.d("subCollection", subCollection);
+                collectionImages.add("https://tpc.googlesyndication.com/simgad/16094122936629946910"); //img para los espacios de headers
 
-                collectionImages.add("https://tpc.googlesyndication.com/simgad/16094122936629946910");
                 for (DataSnapshot dsItem : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").child(subCollection).child("collection").getChildren()){
-
                     String subItem = String.valueOf(dsItem.child("Name").getValue());
                     collectionList.add(new EntryItem(subItem));
-
                     collectionImagesURL = String.valueOf(dsItem.child("ImageURL").getValue());
                     collectionImages.add(collectionImagesURL);
-
-                    Log.d("subCollectionItems", subItem);
-                    Log.d("subCollectionURL", collectionImagesURL);
-
                 }
 
                 // set adapter
                 final CountryAdapter adapter = new CountryAdapter(this, collectionList);
                 lvCollectionHeader.setAdapter(adapter);
                 lvCollectionHeader.setTextFilterEnabled(true);
-                x++;
             }
         }
-
         //for statement si no hay colecciones dentro de la colección (caso normal).
         for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collection").getChildren()){
             if(dataSnapshot.exists()){
-                Log.d("collection", ds.getKey());
-            }
-        }
 
-//
-//        collectionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                Intent itemsIntent = new Intent(CollectionsList_Activity.this, ItemsList_Activity.class);
-//                startActivity(itemsIntent); //Fragment a Activity con intent
-//
-//                //Todo: save selection to go on to // themes -> collection -> SUB-COLLECTIONS&ARTICLES//
-//
-//                String selectedCollection = stringCollectionArray[i];
-//
-//                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
-//                sharedPreferences.edit().putString("selectedCollection", selectedCollection).apply();
-//
-//                Toast.makeText(CollectionsList_Activity.this, (CharSequence) selectedCollection + " SELECTED", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+                String Item = String.valueOf(ds.child("Name").getValue());
+                collectionList.add(new EntryItem(Item));
+                Log.d("collection", Item);
+                collectionImagesURL = String.valueOf(ds.child("ImageURL").getValue());
+                collectionImages.add(collectionImagesURL);
+
+                Log.d("collectionURL", collectionImagesURL);
+            }
+            final CountryAdapter adapter = new CountryAdapter(this, collectionList);
+            lvCollectionHeader.setAdapter(adapter);
+            lvCollectionHeader.setTextFilterEnabled(true);
+        }
     }
 
     public void signOut() {
@@ -284,7 +254,6 @@ public class ItemsList_Activity extends AppCompatActivity
         private ArrayList<Item> originalItem;
         private ImageView itemImg;
 
-
         public CountryAdapter() {
             super();
         }
@@ -326,13 +295,11 @@ public class ItemsList_Activity extends AppCompatActivity
                 // if item
                 String[] imageURLArray = new String[collectionImages.size()];
                 imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo.
-                Log.d("arrayURL", String.valueOf(imageURLArray));
 
                 convertView = inflater.inflate(R.layout.layout_item, parent, false);
                 TextView tvItemTitle = (TextView) convertView.findViewById(R.id.tvItemTitle);
                 tvItemTitle.setText(((EntryItem) item.get(position)).getTitle());
 
-                //Todo: imagenes se desfasa por los headers 
                 itemImg = (ImageView) convertView.findViewById(R.id.itemImg);
                 Picasso.get().load(imageURLArray[position]).into(itemImg); //load image form URL arrays
             }

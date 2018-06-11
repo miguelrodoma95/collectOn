@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/collectOnBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,13 +12,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
             >
             <ImageView
                 android:id="@+id/itemImg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@mipmap/ic_launcher" />
         </LinearLayout>
 
@@ -27,6 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             >
 
             <TextView
@@ -34,6 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Item"
+                android:textSize="20sp"
+                android:textColor="@color/white"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -49,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_blue_button"
                 android:layout_marginTop="5dp"
+                android:textColor="@color/white"
                 android:text="Own"/>
 
             <Button
@@ -56,6 +63,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_sky_blue_button"
                 android:layout_marginTop="5dp"
+
+                android:textColor="@color/white"
                 android:text="Want"/>
 
             <Button
@@ -63,6 +72,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_red_button"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/white"
                 android:text="Hunt"/>
         </LinearLayout>
 

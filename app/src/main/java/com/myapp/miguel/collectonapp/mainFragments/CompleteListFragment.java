@@ -41,19 +41,12 @@ public class CompleteListFragment extends Fragment {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference myRef;
     private ImageView imageView;
-    private ArrayList<String> collectionArray;
-    private ArrayList<String> collectionImages;
+    private ArrayList<String> collectionArray, collectionImages;
     private SharedPreferences sharedPreferences;
-    private String collectionName;
+    private String collectionName, collectionImagesURL;
     String[] stringCollectionArray;
-    private String collectionImagesURL;
     private ListView mainListView;
-    int[] IMAGES = {R.drawable.dccomics, R.drawable.disney, R.drawable.hotwheels, R.drawable.funkopop, R.drawable.got, R.drawable.hotwheels, R.drawable.marvel, R.drawable.nintendo, R.drawable.starwaarslogo};
 
-    //
-    ImageView imageViewTry;
-    String url = "https://firebasestorage.googleapis.com/v0/b/collecton-a2bfb.appspot.com/o/Main%20Logos%2FHotWheels%20Logo.png?alt=media&token=77722b0a-3d21-4cbc-8316-787c7628cdb7";
-    //
 
     public CompleteListFragment() {
     }
@@ -70,14 +63,10 @@ public class CompleteListFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 showData(dataSnapshot);
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.w("Failed to read value.", error.toException());
             }
         });
@@ -105,8 +94,6 @@ public class CompleteListFragment extends Fragment {
             collectionImagesURL = dataSnapshot.child(collectionName).child("Logo").getValue().toString();
 
             ///
-            Log.d(TAG, "Collection name: " + collectionName);
-            Log.d("url de " + collectionName, " : " + collectionImagesURL);
             collectionArray.add(collectionName);
             collectionImages.add(collectionImagesURL);
         }
@@ -120,12 +107,8 @@ public class CompleteListFragment extends Fragment {
                 Intent collectionsIntent = new Intent(getActivity(), CollectionsList_Activity.class);
                 startActivity(collectionsIntent); //Fragment a Activity con intent
 
-                //Todo: save selection to go on to // themes -> COLLECTIONS -> sub-collections -> Articles//
-
                 String selectedTheme = stringCollectionArray[i];
                 sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
-
-                Toast.makeText(getActivity(), (CharSequence) selectedTheme + " SELECTED", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,17 +140,11 @@ public class CompleteListFragment extends Fragment {
 
             stringCollectionArray = new String[collectionArray.size()];
             stringCollectionArray = collectionArray.toArray(stringCollectionArray);
-            Log.d("array de temas", String.valueOf(stringCollectionArray));
 
             String[] imageURLArray = new String[collectionImages.size()];
             imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo.
-            Log.d("array de url", String.valueOf(imageURLArray));
-            //System.out.println("arr: " + Arrays.toString(imageURLArray));
-
-            //for(String s : stringCollectionArray)
 
             Picasso.get().load(imageURLArray[position]).into(imageView); //load image form URL arrays.
-            //imageView.setImageResource(IMAGES[position]);
             textView.setText(stringCollectionArray[position]);
             return view;
         }

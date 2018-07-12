@@ -11,14 +11,26 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
 
 import java.text.SimpleDateFormat;
@@ -30,34 +42,89 @@ import java.util.Locale;
 
 public class UserInfo_Activity extends AppCompatActivity {
 
-    private Spinner spiCountries;
-    private EditText etBirthdate;
+    private Button doneButton;
     private Calendar myCalendar;
     private DatePickerDialog.OnDateSetListener date;
+    private EditText etBirthdate;
+    private FirebaseDatabase secondaryDatabase;
+    private FirebaseApp userFirebaseApp;
+    private Gson gson;
+    private RadioButton rbMale, rbFemale, rbOther;
+    private Spinner spiCountries;
+    private String stSelectedCountry, stUserGender, stUserBirthdate;
+    private TextView tvCountry, tvGender, tvBirthdate;
     private UserInfo userInfo;
-    private Button doneButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info_);
 
-        userInfo = new UserInfo();
+        gson = new Gson();
+        String userInfoObjAsString = getIntent().getStringExtra("userInfoObj");
+        userInfo = gson.fromJson(userInfoObjAsString, UserInfo.class);
+        //Todo: solo agarra name y email cuando se hace login. Buscar manera que los get y set los haga a la database (UserInfo class)
 
         setViewElements();
+        userCollectionsFirebaseDatabase();
         countrySelection();
         calendarPupUpSelectBirthdate();
+        addInfoToDatabase();
         DoneButton();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Todo: if (register_process == 1){intent a MinFeature_Act}
     }
 
     private void DoneButton() {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
-                startActivity(doneIntent);
+
+                selectGender();
+
+                gson = new Gson();
+
+                String userInfoObjAsString = gson.toJson(userInfo);
+
+                if(stUserGender == null || stSelectedCountry == null || stUserBirthdate== null){
+                    if(stUserBirthdate == null){
+                        tvBirthdate.setError("Please select your birthdate");
+                    }
+                    if(stSelectedCountry == null){
+                        tvCountry.setError("Please select your country");
+                    }
+                    if(stUserGender == null){
+                        tvGender.setError("Please select your gender");
+                    }
+                    Toast.makeText(UserInfo_Activity.this, "Field(s) missing!", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Todo: en Firebase register_process = 1
+                    Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
+                    doneIntent.putExtra("userInfoObj", userInfoObjAsString);
+                    startActivity(doneIntent);
+                }
             }
         });
+    }
+
+    private void selectGender() {
+        if(rbMale.isChecked()){
+            stUserGender = "Male";
+        } else if (rbFemale.isChecked()){
+            stUserGender = "Female";
+        } else if (rbOther.isChecked()) {
+            stUserGender = "Other";
+        }
+        userInfo.setGender(stUserGender);
+    }
+
+    private void addInfoToDatabase() {
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
     }
 
     private void calendarPupUpSelectBirthdate() {
@@ -96,12 +163,31 @@ public class UserInfo_Activity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, countries);
         spiCountries.setAdapter(adapter);
+
+        spiCountries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                stSelectedCountry = spiCountries.getSelectedItem().toString();
+                userInfo.setCountry(stSelectedCountry);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                stSelectedCountry = null;
+            }
+        });
     }
 
     private void setViewElements() {
         spiCountries = findViewById(R.id.sp_countries);
         etBirthdate = findViewById(R.id.et_birthdate);
         doneButton = findViewById(R.id.bt_done);
+        rbMale = findViewById(R.id.rb_male);
+        rbFemale = findViewById(R.id.rb_female);
+        rbOther = findViewById(R.id.rb_other);
+        tvCountry = findViewById(R.id.tv_country);
+        tvBirthdate = findViewById(R.id.tv_birthdate);
+        tvGender = findViewById(R.id.tv_gender);
     }
 
     private void updateLabel() {
@@ -109,6 +195,19 @@ public class UserInfo_Activity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         etBirthdate.setText(sdf.format(myCalendar.getTime()));
+        stUserBirthdate = etBirthdate.getText().toString();
+        userInfo.setBirth_date(stUserBirthdate);
+    }
+
+    private void userCollectionsFirebaseDatabase() {
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
+                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
+                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
+                .build();
+        FirebaseApp.initializeApp(this, options, "secondary");
+
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
     }
 }
 

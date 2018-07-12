@@ -1,83 +1,89 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_marginBottom="?attr/actionBarSize"
+    android:orientation="vertical"
     android:background="@color/collectOnBackground"
     tools:context="com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
-            android:src="@drawable/logo" />
-
-        <Button
-            android:id="@+id/buttonBuy"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_below="@id/imageView4"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="70dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="60dp"
-            android:layout_weight="2"
-            android:background="@drawable/rounded_blue_button"
-            android:text="Explore"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="match_parent"
+            android:src="@drawable/logo"/>
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonSell"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight=".45">
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_below="@+id/buttonBuy"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="70dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="2"
-            android:background="@drawable/rounded_sky_blue_button"
-            android:text="Gallery"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
+            android:layout_weight="1">
 
-        <Button
-            android:id="@+id/buttonChange"
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Buy"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_blue_button"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_below="@+id/buttonSell"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="70dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="2"
-            android:background="@drawable/rounded_red_button"
-            android:text="Hunting"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
+            android:layout_weight="1">
 
-    </RelativeLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Sell"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_sky_blue_button"/>
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
+            android:layout_weight="1">
 
-
-</android.support.v4.widget.NestedScrollView>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Trade"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_red_button"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

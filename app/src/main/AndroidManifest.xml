@@ -44,7 +44,9 @@
             android:name=".ItemsList_Activity"
             android:label="Collection"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UserInfo_Activity"></activity>
+        <activity android:name=".UserInfo_Activity"
+            android:label="Collect On">
+        </activity>
     </application>
 
 </manifest>

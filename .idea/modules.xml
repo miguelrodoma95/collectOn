@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CollectOnApp.iml" filepath="$PROJECT_DIR$/CollectOnApp.iml" />
+      <module fileurl="file://C:\Users\MIGUEL\Desktop\CollectOnAndroidStudio\collecton-app\CollectOnApp.iml" filepath="C:\Users\MIGUEL\Desktop\CollectOnAndroidStudio\collecton-app\CollectOnApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/collecton-app.iml" filepath="$PROJECT_DIR$/collecton-app.iml" />
     </modules>
   </component>
 </project>

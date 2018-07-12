@@ -1,6 +1,8 @@
 package com.myapp.miguel.collectonapp;
 
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +26,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.myapp.miguel.collectonapp.Model.UserInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Demonstrate Firebase Authentication using a Facebook access token.
@@ -31,6 +40,9 @@ public class Login_Activity extends AppCompatActivity {
     private static final String TAG = "FacebookLogin";
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
+    private UserInfo userInfo;
+    private Gson gson;
+    private String name, email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +50,7 @@ public class Login_Activity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-
-
+        userInfo = new UserInfo();
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -53,8 +64,33 @@ public class Login_Activity extends AppCompatActivity {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                String accessTokenStirng = loginResult.getAccessToken().getToken();
+                GraphRequest request = GraphRequest.newMeRequest((loginResult.getAccessToken()), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        //getFacebookInfo(object);
+                        try{
+                            name = object.getString("name");
+                            userInfo.setUserName(name);
+                            email = object.getString("email");
+                            userInfo.setEmail(email);
+                            String userID = object.getString("id");
+                            Log.d("completedInfo name ", name);
+                            Log.d("completedInfo email ", email);
+                            Log.d("completedInfo id ", userID);
+
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
             }
 
             @Override
@@ -123,7 +159,11 @@ public class Login_Activity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            gson = new Gson();
+            userInfo.setUserId(user.getUid());
+            String userInfoObjAsString = gson.toJson(userInfo);
             Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);
+            intent.putExtra("userInfoObj", userInfoObjAsString);
             startActivity(intent);
             finish();
         }

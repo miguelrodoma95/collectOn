@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
 import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
 import com.myapp.miguel.collectonapp.mainFragments.MyCollectionFragment;
@@ -41,16 +42,24 @@ public class MainFeature_Activity extends AppCompatActivity
 
     BottomNavigationView bottomNavigationView;
     DrawerLayout drawer;
-    Toolbar toolbar = null;
-    NavigationView navigationView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     Fragment completeListFragment, myCollectionFragment, exchangeFragment,communityFragment;
+    Gson gson;
+    NavigationView navigationView;
+    Toolbar toolbar = null;
     UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature);
+
+        //UserInfo Object
+        gson = new Gson();
+        String userInfoObjAsString = getIntent().getStringExtra("userInfoObj");
+        userInfo = gson.fromJson(userInfoObjAsString, UserInfo.class);
+        Log.d("pruebaUser", userInfo.getCountry() + " " + userInfo.getBirth_date() + " " + userInfo.getGender()
+                + " " + userInfo.getUserName() + " " + userInfo.getEmail() + " " + userInfo.getUserId());
 
         drawerAndToolbarViewContents();
 
@@ -66,37 +75,6 @@ public class MainFeature_Activity extends AppCompatActivity
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationBar();
-
-        userCollectionsFirebaseDatabase();
-    }
-
-    private void userCollectionsFirebaseDatabase() {
-
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
-                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
-                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
-                .build();
-        FirebaseApp.initializeApp(this, options, "secondary");
-
-        FirebaseApp app =FirebaseApp.getInstance("secondary");
-        FirebaseDatabase secondaryDatabase = FirebaseDatabase.getInstance(app);
-
-        DatabaseReference secondRef = secondaryDatabase.getReference();
-
-        secondRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Log.d("PruebaSecondF", ds.getKey());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void drawerAndToolbarViewContents() {
@@ -172,9 +150,6 @@ public class MainFeature_Activity extends AppCompatActivity
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 signOut();
                 break;
-            // this is done, now let us go and intialise the home page.
-            // after this lets start copying the above.
-            // FOLLOW MEEEEE>>>
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

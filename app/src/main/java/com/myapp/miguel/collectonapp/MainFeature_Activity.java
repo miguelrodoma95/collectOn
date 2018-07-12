@@ -29,13 +29,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.myapp.miguel.collectonapp.Model.UserInfo;
 import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
 import com.myapp.miguel.collectonapp.mainFragments.MyCollectionFragment;
 import com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment;
 import com.myapp.miguel.collectonapp.mainFragments.CommunityFragment;
 
 
-public class Feature_Activity extends AppCompatActivity
+public class MainFeature_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
@@ -44,6 +45,7 @@ public class Feature_Activity extends AppCompatActivity
     NavigationView navigationView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     Fragment completeListFragment, myCollectionFragment, exchangeFragment,communityFragment;
+    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,20 +152,6 @@ public class Feature_Activity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

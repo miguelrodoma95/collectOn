@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Black"
+    tools:context="com.myapp.miguel.collectonapp.UserInfo_Activity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/logo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select your Country"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:background="@color/collectOnBackground"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:layout_weight="1"/>
+
+            <android.widget.Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_countries"
+                android:background="@color/white"
+                android:layout_weight="1">
+            </android.widget.Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select your Gender"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:background="@color/collectOnBackground"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:layout_weight="1"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp">
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:textSize="16sp"
+                    android:buttonTint="@color/SkyBlueButton"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:textSize="16sp"
+                    android:buttonTint="@color/SkyBlueButton"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Other"
+                    android:textSize="16sp"
+                    android:buttonTint="@color/SkyBlueButton"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"/>
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select your Birthdate"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:background="@color/collectOnBackground"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Click here to choose birthdate"
+                android:textColor="@color/white"
+                android:textColorHint="@color/GreyMenu"
+                android:textAlignment="center"
+                android:editable="false"
+                android:focusable="false"
+                android:id="@+id/et_birthdate"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_blue_button"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

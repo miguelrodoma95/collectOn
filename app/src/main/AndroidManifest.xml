@@ -33,17 +33,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Feature_Activity"
+            android:name=".MainFeature_Activity"
             android:label="Collect On"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CollectionsList_Activity"
             android:label="@string/title_activity_collections_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ItemsList_Activity"
             android:label="Collection"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UserInfo_Activity"></activity>
     </application>
 
 </manifest>

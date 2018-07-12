@@ -98,11 +98,6 @@ public class Login_Activity extends AppCompatActivity {
 
     // [START auth_with_facebook]
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-        // [START_EXCLUDE silent]
-
-        // [END_EXCLUDE]
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -120,8 +115,6 @@ public class Login_Activity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-
                     }
                 });
     }
@@ -130,7 +123,7 @@ public class Login_Activity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent intent = new Intent(Login_Activity.this, Feature_Activity.class);
+            Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);
             startActivity(intent);
             finish();
         }

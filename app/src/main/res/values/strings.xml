@@ -11,4 +11,9 @@
     <string name="fb_login_protocol_scheme">fb148446905857694</string>
     <string name="title_activity_collections_list">CollectionsListActivity</string>
     <string name="title_activity_items_list_">ItemsList_Activity</string>
+
+    <string-array name="genderSpinner">
+        <item> Male </item>
+        <item> Female </item>
+    </string-array>
 </resources>

@@ -71,13 +71,9 @@ public class Login_Activity extends AppCompatActivity {
                         //getFacebookInfo(object);
                         try{
                             name = object.getString("name");
-                            userInfo.setUserName(name);
                             email = object.getString("email");
-                            userInfo.setEmail(email);
-                            String userID = object.getString("id");
                             Log.d("completedInfo name ", name);
                             Log.d("completedInfo email ", email);
-                            Log.d("completedInfo id ", userID);
 
                         }catch (JSONException e){
                             e.printStackTrace();
@@ -160,6 +156,8 @@ public class Login_Activity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             gson = new Gson();
+            userInfo.setUserName(name);
+            userInfo.setEmail(email);
             userInfo.setUserId(user.getUid());
             String userInfoObjAsString = gson.toJson(userInfo);
             Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);

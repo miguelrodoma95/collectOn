@@ -24,12 +24,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
 
@@ -48,6 +52,7 @@ public class UserInfo_Activity extends AppCompatActivity {
     private EditText etBirthdate;
     private FirebaseDatabase secondaryDatabase;
     private FirebaseApp userFirebaseApp;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Gson gson;
     private RadioButton rbMale, rbFemale, rbOther;
     private Spinner spiCountries;
@@ -70,21 +75,42 @@ public class UserInfo_Activity extends AppCompatActivity {
         userCollectionsFirebaseDatabase();
         countrySelection();
         calendarPupUpSelectBirthdate();
-        addInfoToDatabase();
         DoneButton();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //Todo: if (register_process == 1){intent a MinFeature_Act}
+        DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
+
+        registerStatusRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String value = String.valueOf(dataSnapshot.child(userInfo.getUserId()).child("status").getValue());
+
+                if(value.equals("1")){
+                    gson = new Gson();
+                    String userInfoObjAsString = gson.toJson(userInfo);
+
+                    Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
+                    doneIntent.putExtra("userInfoObj", userInfoObjAsString);
+
+                    startActivity(doneIntent);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Error", "Failed to read value.", error.toException());
+            }
+        });
     }
 
     private void DoneButton() {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 selectGender();
 
                 gson = new Gson();
@@ -103,13 +129,27 @@ public class UserInfo_Activity extends AppCompatActivity {
                     }
                     Toast.makeText(UserInfo_Activity.this, "Field(s) missing!", Toast.LENGTH_SHORT).show();
                 } else {
-                    //Todo: en Firebase register_process = 1
+                    addInfoToDatabase(); //set register_process = 1, and add user info
+
                     Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
                     doneIntent.putExtra("userInfoObj", userInfoObjAsString);
                     startActivity(doneIntent);
                 }
             }
         });
+    }
+
+    private void addInfoToDatabase() {
+        DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
+        DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
+
+        registerStatusRef.child(userInfo.getUserId()).child("status").setValue("1");
+        userInfoRef.child(userInfo.getUserId()).setValue(userInfo);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "Please complete the registration process", Toast.LENGTH_SHORT).show();
     }
 
     private void selectGender() {
@@ -121,10 +161,6 @@ public class UserInfo_Activity extends AppCompatActivity {
             stUserGender = "Other";
         }
         userInfo.setGender(stUserGender);
-    }
-
-    private void addInfoToDatabase() {
-        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
     }
 
     private void calendarPupUpSelectBirthdate() {
@@ -208,6 +244,15 @@ public class UserInfo_Activity extends AppCompatActivity {
         FirebaseApp.initializeApp(this, options, "secondary");
 
         userFirebaseApp = FirebaseApp.getInstance("secondary");
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
+    }
+
+    public void signOut() {
+        mAuth.signOut();
+        LoginManager.getInstance().logOut();
+        Intent loginIntent = new Intent(this, Login_Activity.class);
+        startActivity(loginIntent);
+        finish();
     }
 }
 

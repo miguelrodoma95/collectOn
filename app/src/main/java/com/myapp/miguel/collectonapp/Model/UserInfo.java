@@ -25,6 +25,7 @@ public class UserInfo implements Parcelable{
         this.userId = userId;
     }
 
+
     protected UserInfo(Parcel in) {
         birth_date = in.readString();
         country = in.readString();

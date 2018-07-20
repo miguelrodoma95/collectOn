@@ -2,11 +2,15 @@ package com.myapp.miguel.collectonapp;
 
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,11 +30,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Demonstrate Firebase Authentication using a Facebook access token.
@@ -49,6 +57,8 @@ public class Login_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
+       getKeyHash();
 
         userInfo = new UserInfo();
         // [START initialize_auth]
@@ -108,6 +118,23 @@ public class Login_Activity extends AppCompatActivity {
         // [END initialize_fblogin]
     }
 
+    private void getKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.myapp.miguel.collectonapp",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+    }
+
     // [START on_start_check_user]
     @Override
     public void onStart() {
@@ -156,12 +183,16 @@ public class Login_Activity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             gson = new Gson();
+
             userInfo.setUserName(name);
             userInfo.setEmail(email);
             userInfo.setUserId(user.getUid());
+
             String userInfoObjAsString = gson.toJson(userInfo);
+
             Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);
             intent.putExtra("userInfoObj", userInfoObjAsString);
+
             startActivity(intent);
             finish();
         }

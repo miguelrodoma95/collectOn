@@ -34,7 +34,7 @@
     </RelativeLayout>
 
     <include
-        layout="@layout/app_bar_feature_activity"
+        layout="@layout/app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_feature_activity"
+        app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/menu_drawer_navigation" />
 
 </android.support.v4.widget.DrawerLayout>

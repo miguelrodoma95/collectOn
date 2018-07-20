@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.myapp.miguel.collectonapp.MainFeature_Activity"
-    tools:showIn="@layout/app_bar_feature_activity">
+    tools:showIn="@layout/app_bar">
 
 </android.support.constraint.ConstraintLayout>

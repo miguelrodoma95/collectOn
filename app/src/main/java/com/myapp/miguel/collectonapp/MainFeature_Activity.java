@@ -43,6 +43,8 @@ public class MainFeature_Activity extends AppCompatActivity
     BottomNavigationView bottomNavigationView;
     DrawerLayout drawer;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase secondaryDatabase;
+    private FirebaseApp userFirebaseApp;
     Fragment completeListFragment, myCollectionFragment, exchangeFragment,communityFragment;
     Gson gson;
     NavigationView navigationView;
@@ -62,6 +64,7 @@ public class MainFeature_Activity extends AppCompatActivity
                 + " " + userInfo.getUserName() + " " + userInfo.getEmail() + " " + userInfo.getUserId());
 
         drawerAndToolbarViewContents();
+        //userCollectionsFirebaseDatabase();
 
         completeListFragment = new CompleteListFragment();
         myCollectionFragment = new MyCollectionFragment();
@@ -75,6 +78,18 @@ public class MainFeature_Activity extends AppCompatActivity
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationBar();
+    }
+
+    private void userCollectionsFirebaseDatabase() {
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
+                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
+                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
+                .build();
+        FirebaseApp.initializeApp(this, options, "secondary");
+
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
     }
 
     private void drawerAndToolbarViewContents() {
@@ -130,14 +145,12 @@ public class MainFeature_Activity extends AppCompatActivity
         }
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle menu_bottom_navigation view item clicks here.
         int id=item.getItemId();
         switch (id){
-
             case R.id.Facebook:
                 break;
             case R.id.Twitter:

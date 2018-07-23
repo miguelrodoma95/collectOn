@@ -1,7 +1,9 @@
 package com.myapp.miguel.collectonapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -57,14 +59,15 @@ public class MainFeature_Activity extends AppCompatActivity
         setContentView(R.layout.activity_feature);
 
         //UserInfo Object
-        gson = new Gson();
-        String userInfoObjAsString = getIntent().getStringExtra("userInfoObj");
-        userInfo = gson.fromJson(userInfoObjAsString, UserInfo.class);
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("userInfo", "");
+        userInfo = gson.fromJson(json, UserInfo.class);
+
         Log.d("pruebaUser", userInfo.getCountry() + " " + userInfo.getBirth_date() + " " + userInfo.getGender()
                 + " " + userInfo.getUserName() + " " + userInfo.getEmail() + " " + userInfo.getUserId());
 
         drawerAndToolbarViewContents();
-        //userCollectionsFirebaseDatabase();
 
         completeListFragment = new CompleteListFragment();
         myCollectionFragment = new MyCollectionFragment();
@@ -151,6 +154,10 @@ public class MainFeature_Activity extends AppCompatActivity
         // Handle menu_bottom_navigation view item clicks here.
         int id=item.getItemId();
         switch (id){
+            case R.id.Profile:
+                Intent profileIntent = new Intent(MainFeature_Activity.this, UserProfileSettings_Activity.class);
+                startActivity(profileIntent);
+                break;
             case R.id.Facebook:
                 break;
             case R.id.Twitter:

@@ -123,7 +123,10 @@ public class ItemsList_Activity extends AppCompatActivity
         // Handle menu_bottom_navigation view item clicks here.
         int id=item.getItemId();
         switch (id){
-
+            case R.id.Profile:
+                Intent profileIntent = new Intent(ItemsList_Activity.this, UserProfileSettings_Activity.class);
+                startActivity(profileIntent);
+                break;
             case R.id.Facebook:
                 break;
             case R.id.Twitter:

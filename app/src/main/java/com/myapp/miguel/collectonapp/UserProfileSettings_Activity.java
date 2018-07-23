@@ -2,23 +2,28 @@ package com.myapp.miguel.collectonapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,14 +31,9 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
 
@@ -41,10 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class UserInfo_Activity extends AppCompatActivity {
+public class UserProfileSettings_Activity extends AppCompatActivity {
 
     private Button doneButton;
     private Calendar myCalendar;
@@ -60,50 +59,37 @@ public class UserInfo_Activity extends AppCompatActivity {
     private TextView tvCountry, tvGender, tvBirthdate;
     private UserInfo userInfo;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info_);
+        setContentView(R.layout.activity_user_profile_settings_);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
+        Gson gson = new Gson();
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Gson gson = new Gson();
         String json = mPrefs.getString("userInfo", "");
         userInfo = gson.fromJson(json, UserInfo.class);
-        //Todo: solo agarra name y email cuando se hace login. Buscar manera que los get y set los haga a la database (UserInfo class)
 
         setViewElements();
-        userCollectionsFirebaseDatabase();
         countrySelection();
         calendarPupUpSelectBirthdate();
         DoneButton();
     }
 
-    protected void onStart() {
-        super.onStart();
-        DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
-        registerStatusRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = String.valueOf(dataSnapshot.child(userInfo.getUserId()).child("status").getValue());
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
-                if(value.equals("1")){
-                    gson = new Gson();
-                    String userInfoObjAsString = gson.toJson(userInfo);
-
-                    Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
-                    doneIntent.putExtra("userInfoObj", userInfoObjAsString);
-
-                    startActivity(doneIntent);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Error", "Failed to read value.", error.toException());
-            }
-        });
+    private void addInfoToDatabase() {
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
+        DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
+        //Todo: get id para actualizar info
+        userInfoRef.child(userInfo.getUserId()).setValue(userInfo);
     }
 
     private void DoneButton() {
@@ -111,6 +97,10 @@ public class UserInfo_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectGender();
+
+                gson = new Gson();
+
+                String userInfoObjAsString = gson.toJson(userInfo);
 
                 if(stUserGender == null || stSelectedCountry == null || stUserBirthdate== null){
                     if(stUserBirthdate == null){
@@ -122,35 +112,16 @@ public class UserInfo_Activity extends AppCompatActivity {
                     if(stUserGender == null){
                         tvGender.setError("Please select your gender");
                     }
-                    Toast.makeText(UserInfo_Activity.this, "Field(s) missing!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserProfileSettings_Activity.this, "Field(s) missing!", Toast.LENGTH_SHORT).show();
                 } else {
                     addInfoToDatabase(); //set register_process = 1, and add user info
 
-                    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(userInfo);
-                    prefsEditor.putString("userInfo", json);
-
-                    prefsEditor.commit();
-                    Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
+                    Intent doneIntent = new Intent(UserProfileSettings_Activity.this, MainFeature_Activity.class);
+                    doneIntent.putExtra("userInfoObj", userInfoObjAsString);
                     startActivity(doneIntent);
                 }
             }
         });
-    }
-
-    private void addInfoToDatabase() {
-        DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
-        DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
-
-        registerStatusRef.child(userInfo.getUserId()).child("status").setValue("1");
-        userInfoRef.child(userInfo.getUserId()).setValue(userInfo);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(this, "Please complete the registration process", Toast.LENGTH_SHORT).show();
     }
 
     private void selectGender() {
@@ -180,7 +151,7 @@ public class UserInfo_Activity extends AppCompatActivity {
         etBirthdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(UserInfo_Activity.this, AlertDialog.THEME_HOLO_DARK, date, myCalendar.get(Calendar.YEAR),
+                new DatePickerDialog(UserProfileSettings_Activity.this, AlertDialog.THEME_HOLO_DARK, date, myCalendar.get(Calendar.YEAR),
                         myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
@@ -199,7 +170,12 @@ public class UserInfo_Activity extends AppCompatActivity {
         Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, countries);
+
+        //Todo: Poner selección en el país de que esté en firebase (get)
+        /*int spinnerPosition = adapter.getPosition(userInfo.getCountry());
+        spiCountries.setSelection(spinnerPosition);*/
         spiCountries.setAdapter(adapter);
+
 
         spiCountries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -235,25 +211,4 @@ public class UserInfo_Activity extends AppCompatActivity {
         stUserBirthdate = etBirthdate.getText().toString();
         userInfo.setBirth_date(stUserBirthdate);
     }
-
-    private void userCollectionsFirebaseDatabase() {
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
-                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
-                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
-                .build();
-        FirebaseApp.initializeApp(this, options, "secondary");
-
-        userFirebaseApp = FirebaseApp.getInstance("secondary");
-        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
-    }
-
-    public void signOut() {
-        mAuth.signOut();
-        LoginManager.getInstance().logOut();
-        Intent loginIntent = new Intent(this, Login_Activity.class);
-        startActivity(loginIntent);
-        finish();
-    }
 }
-

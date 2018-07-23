@@ -182,17 +182,19 @@ public class Login_Activity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            gson = new Gson();
 
             userInfo.setUserName(name);
             userInfo.setEmail(email);
             userInfo.setUserId(user.getUid());
 
-            String userInfoObjAsString = gson.toJson(userInfo);
+            SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(userInfo);
+            prefsEditor.putString("userInfo", json);
+            prefsEditor.commit();
 
             Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);
-            intent.putExtra("userInfoObj", userInfoObjAsString);
-
             startActivity(intent);
             finish();
         }

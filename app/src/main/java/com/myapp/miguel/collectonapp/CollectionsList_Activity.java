@@ -128,7 +128,7 @@ public class CollectionsList_Activity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-
+            super.onBackPressed();
         }
     }
 
@@ -139,7 +139,10 @@ public class CollectionsList_Activity extends AppCompatActivity
         // Handle menu_bottom_navigation view item clicks here.
         int id=item.getItemId();
         switch (id){
-
+            case R.id.Profile:
+                Intent profileIntent = new Intent(CollectionsList_Activity.this, UserProfileSettings_Activity.class);
+                startActivity(profileIntent);
+                break;
             case R.id.Facebook:
                 break;
             case R.id.Twitter:
@@ -152,9 +155,6 @@ public class CollectionsList_Activity extends AppCompatActivity
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 signOut();
                 break;
-            // this is done, now let us go and intialise the home page.
-            // after this lets start copying the above.
-            // FOLLOW MEEEEE>>>
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

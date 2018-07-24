@@ -13,141 +13,174 @@
         android:orientation="vertical"
         android:gravity="center_vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profile Information"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="25sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="10dp">
+
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
-            android:src="@drawable/logo" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher_foreground"/>
+
+    </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:background="@color/collectOnBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="10dp">
 
             <TextView
-                android:id="@+id/tv_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select your Country"
-                android:textSize="18sp"
-                android:textAlignment="center"
+                android:text="Name"
                 android:textColor="@color/white"
-                android:background="@color/collectOnBackground"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:layout_weight="1"/>
-
-            <android.widget.Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/sp_countries"
-                android:background="@color/white"
-                android:layout_weight="1">
-            </android.widget.Spinner>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select your Gender"
-                android:textSize="18sp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:background="@color/collectOnBackground"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:layout_weight="1"/>
-
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
-
-                <RadioButton
-                    android:id="@+id/rb_male"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Male"
-                    android:textSize="16sp"
-                    android:buttonTint="@color/SkyBlueButton"
-                    android:textColor="@color/white"
-                    android:layout_weight="1"/>
-
-                <RadioButton
-                    android:id="@+id/rb_female"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Female"
-                    android:textSize="16sp"
-                    android:buttonTint="@color/SkyBlueButton"
-                    android:textColor="@color/white"
-                    android:layout_weight="1"/>
-
-                <RadioButton
-                    android:id="@+id/rb_other"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Other"
-                    android:textSize="16sp"
-                    android:buttonTint="@color/SkyBlueButton"
-                    android:textColor="@color/white"
-                    android:layout_weight="1"/>
-            </RadioGroup>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_birthdate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select your Birthdate"
-                android:textSize="18sp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:background="@color/collectOnBackground"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
+                android:textSize="20sp"
                 android:layout_weight="1"/>
 
             <EditText
+                android:id="@+id/et_userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Click here to choose birthdate"
                 android:textColor="@color/white"
+                android:hint="User Name"
                 android:textColorHint="@color/GreyMenu"
-                android:textAlignment="center"
-                android:editable="false"
-                android:focusable="false"
-                android:id="@+id/et_birthdate"/>
+                android:layout_weight="0.3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/collectOnBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sex"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/et_userSex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="User Sex"
+                android:textColorHint="@color/GreyMenu"
+                android:layout_weight="0.3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/collectOnBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="E-mail"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/et_userEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="User email"
+                android:textColorHint="@color/GreyMenu"
+                android:layout_weight="0.3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/collectOnBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Country"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/et_userCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="Country"
+                android:textColorHint="@color/GreyMenu"
+                android:layout_weight="0.3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/collectOnBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/et_userCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="City"
+                android:textColorHint="@color/GreyMenu"
+                android:layout_weight="0.3"/>
         </LinearLayout>
 
         <Button
-            android:id="@+id/bt_done"
+            android:id="@+id/doneButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_blue_button"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:text="Done"
-            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="20sp"/>
-
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_blue_button"/>
     </LinearLayout>
 </RelativeLayout>

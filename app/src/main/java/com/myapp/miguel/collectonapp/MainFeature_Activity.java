@@ -48,7 +48,6 @@ public class MainFeature_Activity extends AppCompatActivity
     private FirebaseDatabase secondaryDatabase;
     private FirebaseApp userFirebaseApp;
     Fragment completeListFragment, myCollectionFragment, exchangeFragment,communityFragment;
-    Gson gson;
     NavigationView navigationView;
     Toolbar toolbar = null;
     UserInfo userInfo;

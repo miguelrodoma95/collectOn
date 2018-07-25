@@ -91,30 +91,32 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
                 String sex = etSex.getText().toString();
                 String email = etEmail.getText().toString();
 
+                DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
+
                 if(!userName.equals("")){
+                    userInfoRef.child(mAuth.getCurrentUser().getUid()).child("userName").setValue(userName);
                     userInfo.setUserName(etUserName.getText().toString());
                 } else {
                     userInfo.setUserName(defaultUsername);
                 }
                 if(!country.equals("")){
+                    userInfoRef.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
                     userInfo.setCountry(etCountry.getText().toString());
                 } else {
                     userInfo.setCountry(defaultCountry);
                 }
                 if(!sex.equals("")){
+                    userInfoRef.child(mAuth.getCurrentUser().getUid()).child("gender").setValue(sex);
                     userInfo.setGender(etSex.getText().toString());
                 } else {
                     userInfo.setGender(defaultSex);
                 }
                 if(!email.equals("")){
+                    userInfoRef.child(mAuth.getCurrentUser().getUid()).child("email").setValue(email);
                     userInfo.setEmail(etEmail.getText().toString());
                 } else {
                     userInfo.setEmail(defaultEmail);
                 }
-                userInfo.setBirth_date(defaultBirthdate);
-
-                DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
-                userInfoRef.child(userInfo.getUserId()).setValue(userInfo);
 
                 saveUserModel();
 

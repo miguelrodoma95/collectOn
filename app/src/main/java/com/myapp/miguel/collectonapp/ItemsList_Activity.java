@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +47,8 @@ public class ItemsList_Activity extends AppCompatActivity
 
     private Button btnOwn, btnWant, btnHunt;
     private DatabaseReference myRef;
-    private FirebaseDatabase database;
+    private FirebaseDatabase database, secondaryDatabase;
+    private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String selectedCollection, selectecTheme, subCollection, collectionImagesURL;
     private SharedPreferences sharedPreferences;
@@ -163,6 +165,7 @@ public class ItemsList_Activity extends AppCompatActivity
 
                 subCollection = ds.getKey();
                 collectionList.add(new SectionItem(subCollection));
+                Log.d("PruebaSub", subCollection);
                 collectionImages.add("https://tpc.googlesyndication.com/simgad/16094122936629946910"); //img para los espacios de headers
 
                 for (DataSnapshot dsItem : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").child(subCollection).child("collection").getChildren()){
@@ -306,20 +309,31 @@ public class ItemsList_Activity extends AppCompatActivity
                 itemImg = (ImageView) convertView.findViewById(R.id.itemImg);
                 Picasso.get().load(imageURLArray[position]).into(itemImg); //load image form URL arrays
 
-                btnOwn = (Button) convertView.findViewById(R.id.btnOwn);
-                btnWant = (Button) convertView.findViewById(R.id.btnWant);
-                btnHunt = (Button) convertView.findViewById(R.id.btnHunt);
-
-                btnOwn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("pruebaInfo", selectecTheme + " / " + selectedCollection + " / " +
-                                subCollection + " / " + item.get(position).getTitle());
-                    }
-                });
+                clickOwnWantHunt(convertView, position);
             }
             return convertView;
         }
-    }
 
+        private void clickOwnWantHunt(View convertView, final int position) {
+            //Todo: sacar de qué sub colección es el item seleccionado
+            btnOwn = (Button) convertView.findViewById(R.id.btnOwn);
+            btnWant = (Button) convertView.findViewById(R.id.btnWant);
+            btnHunt = (Button) convertView.findViewById(R.id.btnHunt);
+
+            userFirebaseApp = FirebaseApp.getInstance("secondary");
+            secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
+
+            btnOwn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
+                            .child("Collections").child("Own").child("Items").push();
+                    userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
+                    userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
+                    userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
+                    userInfoRef.child("ItemSection").setValue("Android Pending");
+                }
+            });
+        }
+    }
 }

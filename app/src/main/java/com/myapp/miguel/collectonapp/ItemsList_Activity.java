@@ -317,7 +317,6 @@ public class ItemsList_Activity extends AppCompatActivity
                                 subCollection + " / " + item.get(position).getTitle());
                     }
                 });
-
             }
             return convertView;
         }

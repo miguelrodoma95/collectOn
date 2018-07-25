@@ -1,5 +1,6 @@
 package com.myapp.miguel.collectonapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,6 +29,7 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
     private FirebaseDatabase secondaryDatabase;
     private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String defaultUsername, defaultCountry, defaultSex, defaultEmail, defaultBirthdate;
     private UserInfo userInfo;
 
 
@@ -42,20 +44,83 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
         userInfo = gson.fromJson(json, com.myapp.miguel.collectonapp.Model.UserInfo.class);
 
         setViewContent();
+        defaultValues();
         dataToModel();
+    }
+
+    private void saveUserModel() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(userInfo);
+        prefsEditor.putString("userInfo", json);
+        prefsEditor.commit();
+    }
+
+    private void defaultValues() {
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
+        DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
+
+        userInfoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                defaultUsername = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userName").getValue(String.class);
+                defaultCountry = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("country").getValue(String.class);
+                defaultSex = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("gender").getValue(String.class);
+                defaultEmail = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("email").getValue(String.class);
+                defaultBirthdate = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("birth_date").getValue(String.class);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
     }
 
     private void dataToModel() {
         doneBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userInfo.setUserName(etUserName.getText().toString());
-                userInfo.setCountry(etCountry.getText().toString());
-                userInfo.setGender(etSex.getText().toString());
-                userInfo.setEmail(etEmail.getText().toString());
+                String userName = etUserName.getText().toString();
+                String country = etCountry.getText().toString();
+                String sex = etSex.getText().toString();
+                String email = etEmail.getText().toString();
+
+                if(!userName.equals("")){
+                    userInfo.setUserName(etUserName.getText().toString());
+                } else {
+                    userInfo.setUserName(defaultUsername);
+                }
+                if(!country.equals("")){
+                    userInfo.setCountry(etCountry.getText().toString());
+                } else {
+                    userInfo.setCountry(defaultCountry);
+                }
+                if(!sex.equals("")){
+                    userInfo.setGender(etSex.getText().toString());
+                } else {
+                    userInfo.setGender(defaultSex);
+                }
+                if(!email.equals("")){
+                    userInfo.setEmail(etEmail.getText().toString());
+                } else {
+                    userInfo.setEmail(defaultEmail);
+                }
+                userInfo.setBirth_date(defaultBirthdate);
 
                 DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
                 userInfoRef.child(userInfo.getUserId()).setValue(userInfo);
+
+                saveUserModel();
+
+                Intent mainIntent = new Intent(UserProfileSettings_Activity.this, MainFeature_Activity.class);
+                startActivity(mainIntent);
+                finish();
             }
         });
     }

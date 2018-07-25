@@ -66,11 +66,11 @@ public class UserInfo_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info_);
 
+        //Retreive userInfo Model from sharedPref
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String json = mPrefs.getString("userInfo", "");
         userInfo = gson.fromJson(json, UserInfo.class);
-        //Todo: solo agarra name y email cuando se hace login. Buscar manera que los get y set los haga a la database (UserInfo class)
 
         setViewElements();
         userCollectionsFirebaseDatabase();
@@ -106,6 +106,15 @@ public class UserInfo_Activity extends AppCompatActivity {
         });
     }
 
+    private void saveUserModel() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(userInfo);
+        prefsEditor.putString("userInfo", json);
+        prefsEditor.commit();
+    }
+
     private void DoneButton() {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,13 +135,8 @@ public class UserInfo_Activity extends AppCompatActivity {
                 } else {
                     addInfoToDatabase(); //set register_process = 1, and add user info
 
-                    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(userInfo);
-                    prefsEditor.putString("userInfo", json);
+                    saveUserModel(); //Save info in UserInfo Model Object locally via sharedPref
 
-                    prefsEditor.commit();
                     Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
                     startActivity(doneIntent);
                 }

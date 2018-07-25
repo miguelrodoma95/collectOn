@@ -179,7 +179,6 @@ public class Login_Activity extends AppCompatActivity {
     }
     // [END auth_with_facebook]
 
-
     private void updateUI(FirebaseUser user) {
         if (user != null) {
 
@@ -187,16 +186,20 @@ public class Login_Activity extends AppCompatActivity {
             userInfo.setEmail(email);
             userInfo.setUserId(user.getUid());
 
-            SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(userInfo);
-            prefsEditor.putString("userInfo", json);
-            prefsEditor.commit();
+            saveUserModel();
 
             Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);
             startActivity(intent);
             finish();
         }
+    }
+
+    private void saveUserModel() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(userInfo);
+        prefsEditor.putString("userInfo", json);
+        prefsEditor.commit();
     }
 }

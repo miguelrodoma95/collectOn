@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,18 +44,17 @@ import static com.facebook.GraphRequest.TAG;
 public class ItemsList_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private Button btnOwn, btnWant, btnHunt;
     private DatabaseReference myRef;
     private FirebaseDatabase database;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String selectedCollection, selectecTheme, collectionImagesURL;
+    private String selectedCollection, selectecTheme, subCollection, collectionImagesURL;
     private SharedPreferences sharedPreferences;
     private ArrayList<Item> collectionList;
     private ArrayList<String> collectionImages;
     private ImageView collectionBanner;
     private TextView collectionName;
-    //
     private ListView lvCollectionHeader;
-    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class ItemsList_Activity extends AppCompatActivity
         collectionBanner = findViewById(R.id.collectionBanner);
         collectionName = findViewById(R.id.collectionName);
         lvCollectionHeader = (ListView) findViewById(R.id.lvCountry);
+
     }
 
     @Override
@@ -160,7 +161,7 @@ public class ItemsList_Activity extends AppCompatActivity
         for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").getChildren()){
             if(dataSnapshot.exists()){
 
-                String subCollection = ds.getKey();
+                subCollection = ds.getKey();
                 collectionList.add(new SectionItem(subCollection));
                 collectionImages.add("https://tpc.googlesyndication.com/simgad/16094122936629946910"); //img para los espacios de headers
 
@@ -283,7 +284,7 @@ public class ItemsList_Activity extends AppCompatActivity
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -293,8 +294,7 @@ public class ItemsList_Activity extends AppCompatActivity
                 TextView tvSectionTitle = (TextView) convertView.findViewById(R.id.tvSectionTitle);
                 tvSectionTitle.setText(((SectionItem) item.get(position)).getTitle());
             }
-            else
-            {
+            else {
                 // if item
                 String[] imageURLArray = new String[collectionImages.size()];
                 imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo.
@@ -305,6 +305,19 @@ public class ItemsList_Activity extends AppCompatActivity
 
                 itemImg = (ImageView) convertView.findViewById(R.id.itemImg);
                 Picasso.get().load(imageURLArray[position]).into(itemImg); //load image form URL arrays
+
+                btnOwn = (Button) convertView.findViewById(R.id.btnOwn);
+                btnWant = (Button) convertView.findViewById(R.id.btnWant);
+                btnHunt = (Button) convertView.findViewById(R.id.btnHunt);
+
+                btnOwn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("pruebaInfo", selectecTheme + " / " + selectedCollection + " / " +
+                                subCollection + " / " + item.get(position).getTitle());
+                    }
+                });
+
             }
             return convertView;
         }

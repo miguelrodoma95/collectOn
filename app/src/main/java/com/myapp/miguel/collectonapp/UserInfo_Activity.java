@@ -54,7 +54,9 @@ public class UserInfo_Activity extends AppCompatActivity {
     private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Gson gson;
+    private int status;
     private RadioButton rbMale, rbFemale, rbOther;
+    SharedPreferences mPrefs;
     private Spinner spiCountries;
     private String stSelectedCountry, stUserGender, stUserBirthdate;
     private TextView tvCountry, tvGender, tvBirthdate;
@@ -67,7 +69,7 @@ public class UserInfo_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info_);
 
         //Retreive userInfo Model from sharedPref
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String json = mPrefs.getString("userInfo", "");
         userInfo = gson.fromJson(json, UserInfo.class);
@@ -79,31 +81,15 @@ public class UserInfo_Activity extends AppCompatActivity {
         DoneButton();
     }
 
+    @Override
     protected void onStart() {
         super.onStart();
-        DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
-        registerStatusRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = String.valueOf(dataSnapshot.child(userInfo.getUserId()).child("status").getValue());
-
-                if(value.equals("1")){
-                    gson = new Gson();
-                    String userInfoObjAsString = gson.toJson(userInfo);
-
-                    Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
-                    doneIntent.putExtra("userInfoObj", userInfoObjAsString);
-
-                    startActivity(doneIntent);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Error", "Failed to read value.", error.toException());
-            }
-        });
+        status = mPrefs.getInt("status", 0);
+        if (status == 1){
+            Intent mainIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
+            startActivity(mainIntent);
+            finish();
+        }
     }
 
     private void saveUserModel() {
@@ -119,6 +105,8 @@ public class UserInfo_Activity extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                status = 1;
+                mPrefs.edit().putInt("status", status).apply();
                 selectGender();
 
                 if(stUserGender == null || stSelectedCountry == null || stUserBirthdate== null){

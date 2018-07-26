@@ -50,10 +50,11 @@ public class ItemsList_Activity extends AppCompatActivity
     private FirebaseDatabase database, secondaryDatabase;
     private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String selectedCollection, selectecTheme, subCollection, collectionImagesURL;
+    private String selectedCollection, selectecTheme, subCollection, collectionImagesURL, ownItemKey,
+            wantItemKey;
     private SharedPreferences sharedPreferences;
     private ArrayList<Item> collectionList;
-    private ArrayList<String> collectionImages;
+    private ArrayList<String> collectionImages, ownItemsList, wantItemsList;
     private ImageView collectionBanner;
     private TextView collectionName;
     private ListView lvCollectionHeader;
@@ -323,17 +324,79 @@ public class ItemsList_Activity extends AppCompatActivity
             userFirebaseApp = FirebaseApp.getInstance("secondary");
             secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
 
-            //Todo: ValueEventListener to check that item doesnt exists
+            ownItemsList = new ArrayList<>();
+            wantItemsList = new ArrayList<>();
 
             btnOwn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
-                            .child("Collections").child("Own").child("Items").push();
-                    userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
-                    userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
-                    userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
-                    userInfoRef.child("ItemSection").setValue("Android Pending");
+                    DatabaseReference existingItemRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid());
+                    existingItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds1 : dataSnapshot.child("Collections").child("Own").child("Items").getChildren()) {
+                                ownItemKey = ds1.getKey();
+                                for (DataSnapshot ds2 : dataSnapshot.child("Collections").child("Own").child("Items")
+                                        .child(ownItemKey).getChildren()) {
+                                    if (ds2.getKey().equals("ItemName")) {
+                                        ownItemsList.add(ds2.getValue().toString());
+                                    }
+                                }
+                            }
+                            if(!ownItemsList.contains(item.get(position).getTitle())){
+                                DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
+                                        .child("Collections").child("Own").child("Items").push();
+                                userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
+                                userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
+                                userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
+                                userInfoRef.child("ItemSection").setValue("Android Pending");
+                            }
+                            ownItemsList.clear();
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                        }
+                    });
+                }
+            });
+
+            btnWant.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseReference existingItemRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid());
+                    existingItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds1 : dataSnapshot.child("Collections").child("Want").child("Items").getChildren()) {
+                                wantItemKey = ds1.getKey();
+                                for (DataSnapshot ds2 : dataSnapshot.child("Collections").child("Want").child("Items")
+                                        .child(wantItemKey).getChildren()) {
+                                    if (ds2.getKey().equals("ItemName")) {
+                                        wantItemsList.add(ds2.getValue().toString());
+                                    }
+                                }
+                            }
+                            if(!wantItemsList.contains(item.get(position).getTitle())){
+                                DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
+                                        .child("Collections").child("Want").child("Items").push();
+                                userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
+                                userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
+                                userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
+                                userInfoRef.child("ItemSection").setValue("Android Pending");
+                            }
+                            wantItemsList.clear();
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                        }
+                    });
+                }
+            });
+
+            btnHunt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "'Hunt' feature coming soon", Toast.LENGTH_SHORT).show();
                 }
             });
         }

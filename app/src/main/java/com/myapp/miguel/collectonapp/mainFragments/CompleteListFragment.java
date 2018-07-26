@@ -132,9 +132,6 @@ public class CompleteListFragment extends Fragment {
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
-
-
-
             view = getLayoutInflater().inflate(R.layout.custom_list_view,null);
 
             imageView = (ImageView)view.findViewById(R.id.imageView);

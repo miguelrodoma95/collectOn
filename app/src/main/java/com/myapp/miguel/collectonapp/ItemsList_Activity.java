@@ -323,6 +323,8 @@ public class ItemsList_Activity extends AppCompatActivity
             userFirebaseApp = FirebaseApp.getInstance("secondary");
             secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
 
+            //Todo: ValueEventListener to check that item doesnt exists
+
             btnOwn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -16,7 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +30,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import static com.facebook.GraphRequest.TAG;
-
 public class CompleteListFragment extends Fragment {
 
 
@@ -40,11 +37,9 @@ public class CompleteListFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference myRef;
-    private ImageView imageView;
     private ArrayList<String> collectionArray, collectionImages;
     private SharedPreferences sharedPreferences;
     private String collectionName, collectionImagesURL;
-    String[] stringCollectionArray;
     private ListView mainListView;
 
 
@@ -93,13 +88,12 @@ public class CompleteListFragment extends Fragment {
             collectionName = ds.getKey();
             collectionImagesURL = dataSnapshot.child(collectionName).child("Logo").getValue().toString();
 
-            ///
             collectionArray.add(collectionName);
             collectionImages.add(collectionImagesURL);
         }
 
-        CustomAdapter customAdapter = new CustomAdapter();
-        mainListView.setAdapter(customAdapter);  //Custom ListView. Todo: onClickListener que me mande a Fragmento con la info del tema seleccionado.
+        CollectionThemesAdapter collectionThemesAdapter = new CollectionThemesAdapter();
+        mainListView.setAdapter(collectionThemesAdapter);
 
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,13 +101,13 @@ public class CompleteListFragment extends Fragment {
                 Intent collectionsIntent = new Intent(getActivity(), CollectionsList_Activity.class);
                 startActivity(collectionsIntent); //Fragment a Activity con intent
 
-                String selectedTheme = stringCollectionArray[i];
+                String selectedTheme = collectionArray.get(i);
                 sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
             }
         });
     }
 
-    class CustomAdapter extends BaseAdapter {
+    class CollectionThemesAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -134,17 +128,11 @@ public class CompleteListFragment extends Fragment {
         public View getView(int position, View view, ViewGroup parent) {
             view = getLayoutInflater().inflate(R.layout.custom_list_view,null);
 
-            imageView = (ImageView)view.findViewById(R.id.imageView);
+            ImageView themeLogo = (ImageView)view.findViewById(R.id.imageView);
             TextView textView = view.findViewById(R.id.textTema);
 
-            stringCollectionArray = new String[collectionArray.size()];
-            stringCollectionArray = collectionArray.toArray(stringCollectionArray);
-
-            String[] imageURLArray = new String[collectionImages.size()];
-            imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo.
-
-            Picasso.get().load(imageURLArray[position]).into(imageView); //load image form URL arrays.
-            textView.setText(stringCollectionArray[position]);
+            Picasso.get().load(collectionImages.get(position)).into(themeLogo); //load image form URL arrays.
+            textView.setText(collectionArray.get(position));
             return view;
         }
     }

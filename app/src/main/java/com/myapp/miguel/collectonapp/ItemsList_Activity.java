@@ -344,12 +344,13 @@ public class ItemsList_Activity extends AppCompatActivity
                                 }
                             }
                             if(!ownItemsList.contains(item.get(position).getTitle())){
+                                ownItemKey = ownItemKey;
                                 DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
                                         .child("Collections").child("Own").child("Items").push();
                                 userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
-                                userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
-                                userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
-                                userInfoRef.child("ItemSection").setValue("Android Pending");
+                                userInfoRef.child("ItemMainCollections").child("ItemName").setValue(item.get(position).getTitle());
+                                userInfoRef.child("ItemMainCollections").child("ItemName").child("ItemSeriesCollection").setValue(selectedCollection);
+                                //userInfoRef.child("ItemSection").setValue("Android Pending"); //Todo: sub-colection pending
                             }
                             ownItemsList.clear();
                         }

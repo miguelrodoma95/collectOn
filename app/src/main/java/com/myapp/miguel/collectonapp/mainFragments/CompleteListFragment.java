@@ -12,10 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,9 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.myapp.miguel.collectonapp.Adapters.CollectionThemesAdapter;
 import com.myapp.miguel.collectonapp.CollectionsList_Activity;
 import com.myapp.miguel.collectonapp.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -52,13 +49,12 @@ public class CompleteListFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                showData(dataSnapshot);
+                populateList(dataSnapshot);
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -79,20 +75,23 @@ public class CompleteListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void showData(DataSnapshot dataSnapshot) {
+    private void populateList(DataSnapshot dataSnapshot) {
         collectionArray = new ArrayList<String>();
         collectionImages = new ArrayList<String>();
 
         for(DataSnapshot ds : dataSnapshot.getChildren()){
-            mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
             collectionName = ds.getKey();
             collectionImagesURL = dataSnapshot.child(collectionName).child("Logo").getValue().toString();
 
             collectionArray.add(collectionName);
             collectionImages.add(collectionImagesURL);
         }
+        themesAdapter();
+    }
 
-        CollectionThemesAdapter collectionThemesAdapter = new CollectionThemesAdapter();
+    private void themesAdapter() {
+        mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
+        CollectionThemesAdapter collectionThemesAdapter = new CollectionThemesAdapter(getActivity(), collectionArray, collectionImages);
         mainListView.setAdapter(collectionThemesAdapter);
 
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -106,35 +105,4 @@ public class CompleteListFragment extends Fragment {
             }
         });
     }
-
-    class CollectionThemesAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return collectionArray.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            view = getLayoutInflater().inflate(R.layout.custom_list_view,null);
-
-            ImageView themeLogo = (ImageView)view.findViewById(R.id.imageView);
-            TextView textView = view.findViewById(R.id.textTema);
-
-            Picasso.get().load(collectionImages.get(position)).into(themeLogo); //load image form URL arrays.
-            textView.setText(collectionArray.get(position));
-            return view;
-        }
-    }
-
 }

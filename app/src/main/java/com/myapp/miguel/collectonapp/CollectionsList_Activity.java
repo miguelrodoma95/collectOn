@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,8 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import static com.facebook.GraphRequest.TAG;
 
 public class CollectionsList_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -190,7 +185,7 @@ public class CollectionsList_Activity extends AppCompatActivity
         @Override
         public View getView(int position, View view, ViewGroup parent) {
 
-            view = getLayoutInflater().inflate(R.layout.custom_collections_list_view,null);
+            view = getLayoutInflater().inflate(R.layout.adapter_collections_list,null);
 
             TextView textView = view.findViewById(R.id.textTema);
 

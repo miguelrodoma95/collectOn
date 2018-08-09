@@ -46,11 +46,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.UserRegister_Activity"
-            android:label="Collect On"></activity>
+            android:label="Collect On" />
         <activity
             android:name=".Activities.UserProfileSettings_Activity"
             android:label="@string/title_activity_user_profile_settings_"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.MyOwnCollectionsThemes_Activity"></activity>
     </application>
 
 </manifest>

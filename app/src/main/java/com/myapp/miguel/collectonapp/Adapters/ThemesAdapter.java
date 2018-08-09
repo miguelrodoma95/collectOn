@@ -28,6 +28,11 @@ public class ThemesAdapter extends BaseAdapter {
         this.collectionImages = collectionImages;
         this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+    public ThemesAdapter(Context context, ArrayList<String> collectionArray){
+        this.context = context;
+        this.collectionArray = collectionArray;
+        this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
     @Override
     public int getCount() {
@@ -47,13 +52,16 @@ public class ThemesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.adapter_theme_list,null);
+        view = inflater.inflate(R.layout.adapter_theme_list, null);
 
-        ImageView themeLogo = (ImageView)view.findViewById(R.id.imageView);
+        ImageView themeLogo = (ImageView) view.findViewById(R.id.imageView);
         TextView textView = view.findViewById(R.id.textTema);
 
-        Picasso.get().load(collectionImages.get(position)).into(themeLogo); //load image form URL arrays.
+        if (collectionImages != null) {
+            Picasso.get().load(collectionImages.get(position)).into(themeLogo); //load image form URL arrays.
+        }
         textView.setText(collectionArray.get(position));
+
         return view;
     }
 }

@@ -29,10 +29,8 @@ import java.util.ArrayList;
 
 public class CompleteListFragment extends Fragment {
 
-
     private FirebaseDatabase database;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference myRef;
     private ArrayList<String> collectionArray, collectionImages;
     private SharedPreferences sharedPreferences;

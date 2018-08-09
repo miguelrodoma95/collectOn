@@ -71,15 +71,12 @@ public class ItemsList_Activity extends AppCompatActivity
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 showData(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Failed to read value.", error.toException());
+                Log.w("Failed to get data", error.toException());
             }
         });
     }
@@ -338,8 +335,8 @@ public class ItemsList_Activity extends AppCompatActivity
                                 DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
                                         .child("Collections").child("Own").child("Items").push();
                                 userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
-                                userInfoRef.child("ItemMainCollections").child("ItemName").setValue(item.get(position).getTitle());
-                                userInfoRef.child("ItemMainCollections").child("ItemName").child("ItemSeriesCollection").setValue(selectedCollection);
+                                userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
+                                userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
                                 //userInfoRef.child("ItemSection").setValue("Android Pending"); //Todo: sub-colection pending
                             }
                             ownItemsList.clear();

@@ -1,4 +1,4 @@
-package com.myapp.miguel.collectonapp;
+package com.myapp.miguel.collectonapp.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,20 +23,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
-import com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment;
-import com.myapp.miguel.collectonapp.mainFragments.MyCollectionFragment;
-import com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment;
-import com.myapp.miguel.collectonapp.mainFragments.CommunityFragment;
+import com.myapp.miguel.collectonapp.Fragments.CompleteListFragment;
+import com.myapp.miguel.collectonapp.Fragments.MyCollectionFragment;
+import com.myapp.miguel.collectonapp.Fragments.ExchangeFragment;
+import com.myapp.miguel.collectonapp.Fragments.CommunityFragment;
+import com.myapp.miguel.collectonapp.R;
 
 
 public class MainFeature_Activity extends AppCompatActivity

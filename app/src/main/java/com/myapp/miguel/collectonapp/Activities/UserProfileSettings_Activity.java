@@ -1,11 +1,10 @@
-package com.myapp.miguel.collectonapp;
+package com.myapp.miguel.collectonapp.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.myapp.miguel.collectonapp.R;
 
 
 public class UserProfileSettings_Activity extends AppCompatActivity {

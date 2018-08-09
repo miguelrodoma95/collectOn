@@ -1,24 +1,18 @@
-package com.myapp.miguel.collectonapp;
+package com.myapp.miguel.collectonapp.Activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,23 +22,19 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
+import com.myapp.miguel.collectonapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class UserInfo_Activity extends AppCompatActivity {
+public class UserRegister_Activity extends AppCompatActivity {
 
     private Button doneButton;
     private Calendar myCalendar;
@@ -56,7 +46,7 @@ public class UserInfo_Activity extends AppCompatActivity {
     private Gson gson;
     private int status;
     private RadioButton rbMale, rbFemale, rbOther;
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     private Spinner spiCountries;
     private String stSelectedCountry, stUserGender, stUserBirthdate;
     private TextView tvCountry, tvGender, tvBirthdate;
@@ -86,7 +76,7 @@ public class UserInfo_Activity extends AppCompatActivity {
         super.onStart();
         status = mPrefs.getInt("status", 0);
         if (status == 1){
-            Intent mainIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
+            Intent mainIntent = new Intent(UserRegister_Activity.this, MainFeature_Activity.class);
             startActivity(mainIntent);
             finish();
         }
@@ -119,13 +109,13 @@ public class UserInfo_Activity extends AppCompatActivity {
                     if(stUserGender == null){
                         tvGender.setError("Please select your gender");
                     }
-                    Toast.makeText(UserInfo_Activity.this, "Field(s) missing!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegister_Activity.this, "Field(s) missing!", Toast.LENGTH_SHORT).show();
                 } else {
                     addInfoToDatabase(); //set register_process = 1, and add user info
 
                     saveUserModel(); //Save info in UserInfo Model Object locally via sharedPref
 
-                    Intent doneIntent = new Intent(UserInfo_Activity.this, MainFeature_Activity.class);
+                    Intent doneIntent = new Intent(UserRegister_Activity.this, MainFeature_Activity.class);
                     startActivity(doneIntent);
                 }
             }
@@ -172,7 +162,7 @@ public class UserInfo_Activity extends AppCompatActivity {
         etBirthdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(UserInfo_Activity.this, AlertDialog.THEME_HOLO_DARK, date, myCalendar.get(Calendar.YEAR),
+                new DatePickerDialog(UserRegister_Activity.this, AlertDialog.THEME_HOLO_DARK, date, myCalendar.get(Calendar.YEAR),
                         myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });

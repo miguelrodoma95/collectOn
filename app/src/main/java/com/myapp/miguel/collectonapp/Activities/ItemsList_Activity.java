@@ -1,13 +1,10 @@
-package com.myapp.miguel.collectonapp;
+package com.myapp.miguel.collectonapp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +14,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,11 +31,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.myapp.miguel.collectonapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import static com.facebook.GraphRequest.TAG;
 
 public class ItemsList_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -269,7 +263,6 @@ public class ItemsList_Activity extends AppCompatActivity
         public CountryAdapter(Context context, ArrayList<Item> item) {
             this.context = context;
             this.item = item;
-            //this.originalItem = item;
         }
 
         @Override
@@ -299,16 +292,13 @@ public class ItemsList_Activity extends AppCompatActivity
                 tvSectionTitle.setText(((SectionItem) item.get(position)).getTitle());
             }
             else {
-                // if item
-                String[] imageURLArray = new String[collectionImages.size()];
-                imageURLArray = collectionImages.toArray(imageURLArray);  //url´s en un arreglo.
-
                 convertView = inflater.inflate(R.layout.layout_item, parent, false);
+
                 TextView tvItemTitle = (TextView) convertView.findViewById(R.id.tvItemTitle);
                 tvItemTitle.setText(((EntryItem) item.get(position)).getTitle());
 
                 itemImg = (ImageView) convertView.findViewById(R.id.itemImg);
-                Picasso.get().load(imageURLArray[position]).into(itemImg); //load image form URL arrays
+                Picasso.get().load(collectionImages.get(position)).into(itemImg); //load image form URL arrays
 
                 clickOwnWantHunt(convertView, position);
             }

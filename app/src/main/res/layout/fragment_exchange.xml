@@ -9,7 +9,7 @@
     android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="vertical"
     android:background="@color/collectOnBackground"
-    tools:context="com.myapp.miguel.collectonapp.mainFragments.ExchangeFragment">
+    tools:context="com.myapp.miguel.collectonapp.Fragments.ExchangeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

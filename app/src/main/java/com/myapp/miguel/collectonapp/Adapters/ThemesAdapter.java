@@ -16,13 +16,13 @@ import java.util.ArrayList;
 /**
  * Created by Miguel on 8/9/2018.
  */
-public class CollectionThemesAdapter extends BaseAdapter {
+public class ThemesAdapter extends BaseAdapter {
 
     private ArrayList<String> collectionArray, collectionImages;
     private LayoutInflater mInflater;
     private Context context;
 
-    public CollectionThemesAdapter(Context context, ArrayList<String> collectionArray, ArrayList<String> collectionImages){
+    public ThemesAdapter(Context context, ArrayList<String> collectionArray, ArrayList<String> collectionImages){
         this.context = context;
         this.collectionArray = collectionArray;
         this.collectionImages = collectionImages;

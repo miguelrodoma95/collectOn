@@ -1,4 +1,4 @@
-package com.myapp.miguel.collectonapp;
+package com.myapp.miguel.collectonapp.Activities;
 
 
 import android.content.SharedPreferences;
@@ -30,9 +30,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
+import com.myapp.miguel.collectonapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -188,7 +188,7 @@ public class Login_Activity extends AppCompatActivity {
 
             saveUserModel();
 
-            Intent intent = new Intent(Login_Activity.this, UserInfo_Activity.class);
+            Intent intent = new Intent(Login_Activity.this, UserRegister_Activity.class);
             startActivity(intent);
             finish();
         }

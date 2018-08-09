@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    tools:context="com.myapp.miguel.collectonapp.mainFragments.CompleteListFragment">
+    tools:context="com.myapp.miguel.collectonapp.Fragments.CompleteListFragment">
 
         <ListView
             android:id="@+id/mainListView"

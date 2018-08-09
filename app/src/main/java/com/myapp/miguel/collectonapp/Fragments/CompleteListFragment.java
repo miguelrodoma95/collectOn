@@ -1,4 +1,4 @@
-package com.myapp.miguel.collectonapp.mainFragments;
+package com.myapp.miguel.collectonapp.Fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import com.myapp.miguel.collectonapp.Adapters.CollectionThemesAdapter;
-import com.myapp.miguel.collectonapp.CollectionsList_Activity;
+import com.myapp.miguel.collectonapp.Adapters.ThemesAdapter;
+import com.myapp.miguel.collectonapp.Activities.CollectionsList_Activity;
 import com.myapp.miguel.collectonapp.R;
 
 import java.util.ArrayList;
@@ -91,17 +91,16 @@ public class CompleteListFragment extends Fragment {
 
     private void themesAdapter() {
         mainListView = (ListView)getActivity().findViewById(R.id.mainListView);
-        CollectionThemesAdapter collectionThemesAdapter = new CollectionThemesAdapter(getActivity(), collectionArray, collectionImages);
-        mainListView.setAdapter(collectionThemesAdapter);
+        ThemesAdapter themesAdapter = new ThemesAdapter(getActivity(), collectionArray, collectionImages);
+        mainListView.setAdapter(themesAdapter);
 
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                sharedPreferences.edit().putString("selectedTheme", collectionArray.get(i)).apply();
+
                 Intent collectionsIntent = new Intent(getActivity(), CollectionsList_Activity.class);
                 startActivity(collectionsIntent); //Fragment a Activity con intent
-
-                String selectedTheme = collectionArray.get(i);
-                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
             }
         });
     }

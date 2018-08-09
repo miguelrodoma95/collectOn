@@ -1,4 +1,4 @@
-package com.myapp.miguel.collectonapp;
+package com.myapp.miguel.collectonapp.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,92 +27,77 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.myapp.miguel.collectonapp.Adapters.CollectionsAdapter;
+import com.myapp.miguel.collectonapp.R;
 
 import java.util.ArrayList;
 
 public class CollectionsList_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Toolbar toolbar = null;
-    NavigationView navigationView;
-    SharedPreferences sharedPreferences;
-    String selectedTheme;
-    ListView collectionsListView;
-    String[] stringCollectionArray;
+    private Toolbar toolbar = null;
+    private NavigationView navigationView;
+    private SharedPreferences sharedPreferences;
+    private String selectedTheme;
+    private ListView collectionsListView;
     private ArrayList<String> collectionArray;
     private DatabaseReference myRef;
     private FirebaseDatabase database;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collections_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        drawerAndToolbarSettings();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         selectedTheme = sharedPreferences.getString("selectedTheme", "error");
+        ((AppCompatActivity)this).getSupportActionBar().setTitle(selectedTheme + " Collections");
+
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
-        ((AppCompatActivity)this).getSupportActionBar().setTitle(selectedTheme + " Collections");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                showData(dataSnapshot);
+                populateList(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Failed to read value.", error.toException());
+                Log.w("Failed to get data.", error.toException());
             }
         });
     }
 
-    private void showData(DataSnapshot dataSnapshot) {
+    private void populateList(DataSnapshot dataSnapshot) {
         collectionArray = new ArrayList<String>();
         myRef = database.getReference(selectedTheme);
-        for(DataSnapshot ds : dataSnapshot.child(selectedTheme).child("Categories").getChildren()){
 
-            collectionsListView = findViewById(R.id.collectionsListView);
+        for(DataSnapshot ds : dataSnapshot.child(selectedTheme).child("Categories").getChildren()){
             String collectionName = ds.getKey();
 
             collectionArray.add(collectionName);
         }
+        collectionsListAdapter();
+    }
 
-        stringCollectionArray = new String[collectionArray.size()];
-        stringCollectionArray = collectionArray.toArray(stringCollectionArray);
-
-        CustomAdapter customAdapter = new CustomAdapter();
-        collectionsListView.setAdapter(customAdapter);  //Custom ListView. Todo: onClickListener que me mande a Fragmento con la info del tema seleccionado.
+    private void collectionsListAdapter() {
+        collectionsListView = findViewById(R.id.collectionsListView);
+        CollectionsAdapter customAdapter = new CollectionsAdapter(CollectionsList_Activity.this, collectionArray);
+        collectionsListView.setAdapter(customAdapter);
 
         collectionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
+                sharedPreferences.edit().putString("selectedCollection", collectionArray.get(i)).apply();
 
                 Intent itemsIntent = new Intent(CollectionsList_Activity.this, ItemsList_Activity.class);
-                startActivity(itemsIntent); //Fragment a Activity con intent
-
-                String selectedCollection = stringCollectionArray[i];
-
-                sharedPreferences.edit().putString("selectedTheme", selectedTheme).apply();
-                sharedPreferences.edit().putString("selectedCollection", selectedCollection).apply();
+                startActivity(itemsIntent);
             }
         });
     }
@@ -127,6 +112,19 @@ public class CollectionsList_Activity extends AppCompatActivity
         }
     }
 
+    private void drawerAndToolbarSettings() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -163,39 +161,6 @@ public class CollectionsList_Activity extends AppCompatActivity
         Intent loginIntent = new Intent(this, Login_Activity.class);
         startActivity(loginIntent);
         finish();
-    }
-
-    class CustomAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return collectionArray.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-
-            view = getLayoutInflater().inflate(R.layout.adapter_collections_list,null);
-
-            TextView textView = view.findViewById(R.id.textTema);
-
-            stringCollectionArray = new String[collectionArray.size()];
-            stringCollectionArray = collectionArray.toArray(stringCollectionArray);
-            Log.d("array de temas", String.valueOf(stringCollectionArray));
-
-            textView.setText(stringCollectionArray[position]);
-            return view;
-        }
     }
 
 }

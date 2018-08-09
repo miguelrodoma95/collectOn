@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Black"
-    tools:context="com.myapp.miguel.collectonapp.UserInfo_Activity">
+    tools:context="com.myapp.miguel.collectonapp.Activities.UserRegister_Activity">
 
 
     <LinearLayout

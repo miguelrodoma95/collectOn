@@ -1,4 +1,4 @@
-package com.myapp.miguel.collectonapp.mainFragments;
+package com.myapp.miguel.collectonapp.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import com.myapp.miguel.collectonapp.R;
 
-public class MyCollectionFragment extends Fragment {
+public class CommunityFragment extends Fragment {
 
-    public MyCollectionFragment() {
+    public CommunityFragment() {
     }
 
     @Override
@@ -20,7 +20,7 @@ public class MyCollectionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_my_collections, container, false);
+        return inflater.inflate(R.layout.fragment_community, container, false);
     }
 
 }

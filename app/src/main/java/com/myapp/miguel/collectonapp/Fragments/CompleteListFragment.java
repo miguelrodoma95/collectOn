@@ -96,6 +96,7 @@ public class CompleteListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 sharedPreferences.edit().putString("selectedTheme", collectionArray.get(i)).apply();
+                sharedPreferences.edit().putString("themeLogo", collectionImages.get(i)).apply();
 
                 Intent collectionsIntent = new Intent(getActivity(), CollectionsList_Activity.class);
                 startActivity(collectionsIntent); //Fragment a Activity con intent

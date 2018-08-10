@@ -44,7 +44,7 @@ public class ItemsList_Activity extends AppCompatActivity
     private FirebaseDatabase database, secondaryDatabase;
     private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String selectedCollection, selectecTheme, subCollection, collectionImagesURL, ownItemKey,
+    private String selectedCollection, selectecTheme, selectedThemeLogo, subCollection, collectionImagesURL, ownItemKey,
             wantItemKey;
     private SharedPreferences sharedPreferences;
     private ArrayList<Item> collectionList;
@@ -62,6 +62,7 @@ public class ItemsList_Activity extends AppCompatActivity
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         selectedCollection = sharedPreferences.getString("selectedCollection", " ");
         selectecTheme = sharedPreferences.getString("selectedTheme", " ");
+        selectedThemeLogo = sharedPreferences.getString("themeLogo", " ");
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
@@ -334,10 +335,15 @@ public class ItemsList_Activity extends AppCompatActivity
                                 ownItemKey = ownItemKey;
                                 DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
                                         .child("Collections").child("Own").child("Items").push();
+                                userInfoRef.child("CollectionLogo").setValue(selectedThemeLogo);
                                 userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
                                 userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
                                 userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
                                 //userInfoRef.child("ItemSection").setValue("Android Pending"); //Todo: sub-colection pending
+
+                                Toast.makeText(ItemsList_Activity.this, item.get(position).getTitle() + " added to Owned Collections!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ItemsList_Activity.this, item.get(position).getTitle() + " is already in your Owned Collections list!", Toast.LENGTH_SHORT).show();
                             }
                             ownItemsList.clear();
                         }

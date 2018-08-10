@@ -20,6 +20,7 @@ class MyOwnCollectionsThemes_Activity : AppCompatActivity() {
     private var myRef: DatabaseReference? = secondaryDatabase?.getReference("users")?.child(mAuth.currentUser?.uid!!)
             ?.child("Collections")?.child("Own")
     val ownThemesList : ArrayList<String> = ArrayList()
+    val ownThemeLogoList : ArrayList<String> = ArrayList()
     var ownItemKey : String? = null
 
 
@@ -33,7 +34,7 @@ class MyOwnCollectionsThemes_Activity : AppCompatActivity() {
     private fun themesAdapter() {
         var themesList : ListView = findViewById(R.id.mainListView)
 
-        var themesAdapter = ThemesAdapter(this, ownThemesList)
+        var themesAdapter = ThemesAdapter(this, ownThemesList, ownThemeLogoList)
         themesList.setAdapter(themesAdapter)
     }
 
@@ -49,6 +50,11 @@ class MyOwnCollectionsThemes_Activity : AppCompatActivity() {
                         if (ds2.key == "ItemMainCollections") {
                             if(!ownThemesList.contains(ds2.value)){
                                 ownThemesList.add(ds2.value!!.toString())
+                            }
+                        }
+                        if (ds2.key == "CollectionLogo") {
+                            if(!ownThemeLogoList.contains(ds2.value)){
+                                ownThemeLogoList.add(ds2.value!!.toString())
                             }
                         }
                     }

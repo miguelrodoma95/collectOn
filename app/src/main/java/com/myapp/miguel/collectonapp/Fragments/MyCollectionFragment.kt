@@ -39,9 +39,11 @@ class MyCollectionFragment : Fragment() {
         displayUserName()
 
         var btnOwnCollect = activity?.findViewById<Button>(R.id.btn_ownCollections)
+
         btnOwnCollect?.setOnClickListener{
             val myOwnCollIntent = Intent(activity, MyOwnCollectionsThemes_Activity::class.java)
             startActivity(myOwnCollIntent)
+
             Toast.makeText(activity, "Go to owned collections", Toast.LENGTH_SHORT).show()
         }
 
@@ -56,9 +58,13 @@ class MyCollectionFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 userName = dataSnapshot.child("userName").value.toString()
                 userLastName = dataSnapshot.child("userLastName").value.toString()
+
                 collectorName.text = "$userName " + userLastName
             }
-            override fun onCancelled(error: DatabaseError) {}
-        })     }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
 }
 

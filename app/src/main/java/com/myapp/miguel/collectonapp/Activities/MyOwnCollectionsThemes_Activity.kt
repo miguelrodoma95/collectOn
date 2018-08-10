@@ -31,13 +31,6 @@ class MyOwnCollectionsThemes_Activity : AppCompatActivity() {
         listOfOwnedThemes()
     }
 
-    private fun themesAdapter() {
-        var themesList : ListView = findViewById(R.id.mainListView)
-
-        var themesAdapter = ThemesAdapter(this, ownThemesList, ownThemeLogoList)
-        themesList.setAdapter(themesAdapter)
-    }
-
     private fun listOfOwnedThemes() {
         myRef?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
@@ -62,5 +55,12 @@ class MyOwnCollectionsThemes_Activity : AppCompatActivity() {
                 themesAdapter()
             }
         })
+    }
+
+    private fun themesAdapter() {
+        var themesList : ListView = findViewById(R.id.mainListView)
+
+        var themesAdapter = ThemesAdapter(this, ownThemesList, ownThemeLogoList)
+        themesList.setAdapter(themesAdapter)
     }
 }

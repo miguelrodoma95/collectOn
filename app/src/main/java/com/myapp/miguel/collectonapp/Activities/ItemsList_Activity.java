@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class ItemsList_Activity extends AppCompatActivity
     private FirebaseDatabase database, secondaryDatabase;
     private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String selectedCollection, selectecTheme, selectedThemeLogo, subCollection, collectionImagesURL, ownItemKey,
+    private String selectedCollection, selectecTheme, selectedSubCollection, selectedThemeLogo, subCollection, collectionImagesURL, ownItemKey,
             wantItemKey;
     private SharedPreferences sharedPreferences;
     private ArrayList<Item> collectionList;
@@ -155,10 +156,8 @@ public class ItemsList_Activity extends AppCompatActivity
         //for statement por si hay colecciones dentro de la colección
         for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").getChildren()){
             if(dataSnapshot.exists()){
-
                 subCollection = ds.getKey();
                 collectionList.add(new SectionItem(subCollection));
-                Log.d("PruebaSub", subCollection);
                 collectionImages.add("https://tpc.googlesyndication.com/simgad/16094122936629946910"); //img para los espacios de headers
 
                 for (DataSnapshot dsItem : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").child(subCollection).child("collection").getChildren()){
@@ -177,7 +176,6 @@ public class ItemsList_Activity extends AppCompatActivity
         //for statement si no hay colecciones dentro de la colección (caso normal).
         for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collection").getChildren()){
             if(dataSnapshot.exists()){
-
                 String Item = String.valueOf(ds.child("Name").getValue());
                 collectionList.add(new EntryItem(Item));
                 Log.d("collection", Item);
@@ -312,6 +310,8 @@ public class ItemsList_Activity extends AppCompatActivity
             userFirebaseApp = FirebaseApp.getInstance("secondary");
             secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
 
+            final String selectedItem = item.get(position).getTitle();
+
             ownItemsList = new ArrayList<>();
             wantItemsList = new ArrayList<>();
 
@@ -319,6 +319,30 @@ public class ItemsList_Activity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     DatabaseReference existingItemRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid());
+                    myRef = database.getReference();
+
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").getChildren()){
+                                if(dataSnapshot.exists()){
+                                    for(DataSnapshot ds2 : ds.child("collection").getChildren()){
+                                        String subCollection = ds2.child("Name").getValue().toString();
+
+                                        if(subCollection.equals(selectedItem)){
+                                            selectedSubCollection = ds.getKey();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                     existingItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -332,19 +356,24 @@ public class ItemsList_Activity extends AppCompatActivity
                                 }
                             }
                             if(!ownItemsList.contains(item.get(position).getTitle())){
-                                ownItemKey = ownItemKey;
                                 DatabaseReference userInfoRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
                                         .child("Collections").child("Own").child("Items").push();
                                 userInfoRef.child("CollectionLogo").setValue(selectedThemeLogo);
                                 userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
                                 userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
                                 userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
-                                //userInfoRef.child("ItemSection").setValue("Android Pending"); //Todo: sub-colection pending
+                                if(selectedSubCollection == null){
+                                    userInfoRef.child("ItemSection").setValue(selectedCollection);
+                                } else {
+                                    userInfoRef.child("ItemSection").setValue(selectedSubCollection);
+                                }
 
                                 Toast.makeText(ItemsList_Activity.this, item.get(position).getTitle() + " added to Owned Collections!", Toast.LENGTH_SHORT).show();
+
                             } else {
                                 Toast.makeText(ItemsList_Activity.this, item.get(position).getTitle() + " is already in your Owned Collections list!", Toast.LENGTH_SHORT).show();
                             }
+
                             ownItemsList.clear();
                         }
                         @Override
@@ -358,6 +387,32 @@ public class ItemsList_Activity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     DatabaseReference existingItemRef = secondaryDatabase.getReference("users").child(mAuth.getCurrentUser().getUid());
+                    myRef = database.getReference();
+
+
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot ds : dataSnapshot.child(selectecTheme).child("Categories").child(selectedCollection).child("collections").getChildren()){
+                                if(dataSnapshot.exists()){
+                                    for(DataSnapshot ds2 : ds.child("collection").getChildren()){
+                                        String subCollection = ds2.child("Name").getValue().toString();
+
+                                        if(subCollection.equals(selectedItem)){
+                                            selectedSubCollection = ds.getKey();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                     existingItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -376,7 +431,16 @@ public class ItemsList_Activity extends AppCompatActivity
                                 userInfoRef.child("ItemMainCollections").setValue(selectecTheme);
                                 userInfoRef.child("ItemName").setValue(item.get(position).getTitle());
                                 userInfoRef.child("ItemSeriesCollection").setValue(selectedCollection);
-                                userInfoRef.child("ItemSection").setValue("Android Pending");
+                                if(selectedSubCollection == null){
+                                    userInfoRef.child("ItemSection").setValue(selectedCollection);
+                                } else {
+                                    userInfoRef.child("ItemSection").setValue(selectedSubCollection);
+                                }
+
+                                Toast.makeText(ItemsList_Activity.this, item.get(position).getTitle() + " added to Wish List!", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(ItemsList_Activity.this, item.get(position).getTitle() + " is already in your Wish List!", Toast.LENGTH_SHORT).show();
                             }
                             wantItemsList.clear();
                         }

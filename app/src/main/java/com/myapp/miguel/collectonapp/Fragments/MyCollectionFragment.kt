@@ -50,11 +50,13 @@ class MyCollectionFragment : Fragment() {
     private fun displayUserName() {
         var collectorName = activity!!.findViewById<TextView>(R.id.tv_collectorName)
         var userName: String
+        var userLastName: String
 
         myRef?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 userName = dataSnapshot.child("userName").value.toString()
-                collectorName.text = userName
+                userLastName = dataSnapshot.child("userLastName").value.toString()
+                collectorName.text = "$userName " + userLastName
             }
             override fun onCancelled(error: DatabaseError) {}
         })     }

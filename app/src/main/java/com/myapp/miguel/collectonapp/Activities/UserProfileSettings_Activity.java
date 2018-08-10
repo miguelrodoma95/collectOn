@@ -25,11 +25,11 @@ import com.myapp.miguel.collectonapp.R;
 public class UserProfileSettings_Activity extends AppCompatActivity {
 
     private Button doneBT;
-    private EditText etUserName, etCountry, etCity, etSex, etEmail;
+    private EditText etUserName, etCountry, etCity, etSex, etEmail, etUserLastName;
     private FirebaseDatabase secondaryDatabase;
     private FirebaseApp userFirebaseApp;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String defaultUsername, defaultCountry, defaultSex, defaultEmail, defaultBirthdate;
+    private String defaultUsername, defaultCountry, defaultSex, defaultEmail, defaultUserLastName, defaultBirthdate;
     private UserInfo userInfo;
 
 
@@ -68,6 +68,7 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 defaultUsername = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userName").getValue(String.class);
+                defaultUserLastName = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userLastName").getValue(String.class);
                 defaultCountry = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("country").getValue(String.class);
                 defaultSex = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("gender").getValue(String.class);
                 defaultEmail = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("email").getValue(String.class);
@@ -77,7 +78,6 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
             }
         });
     }
@@ -87,6 +87,7 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String userName = etUserName.getText().toString();
+                String userLastName = etUserLastName.getText().toString();
                 String country = etCountry.getText().toString();
                 String sex = etSex.getText().toString();
                 String email = etEmail.getText().toString();
@@ -98,6 +99,12 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
                     userInfo.setUserName(etUserName.getText().toString());
                 } else {
                     userInfo.setUserName(defaultUsername);
+                }
+                if(!userLastName.equals("")){
+                    userInfoRef.child(mAuth.getCurrentUser().getUid()).child("userLastName").setValue(userLastName);
+                    userInfo.setUserLastName(etUserLastName.getText().toString());
+                } else {
+                    userInfo.setUserLastName(defaultUserLastName);
                 }
                 if(!country.equals("")){
                     userInfoRef.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
@@ -129,6 +136,7 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
 
     private void setViewContent() {
         etUserName = findViewById(R.id.et_userName);
+        etUserLastName = findViewById(R.id.et_userLastName);
         etCity = findViewById(R.id.et_userCity);
         etCountry = findViewById(R.id.et_userCountry);
         etSex = findViewById(R.id.et_userSex);
@@ -146,6 +154,8 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
                 // whenever data at this location is updated.
                 String userName = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userName").getValue(String.class);
                 etUserName.setHint(userName);
+                String userLastName =  dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userLastName").getValue(String.class);
+                etUserLastName.setHint(userLastName);
                 String country = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("country").getValue(String.class);
                 etCountry.setHint(country);
                 String gender = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("gender").getValue(String.class);

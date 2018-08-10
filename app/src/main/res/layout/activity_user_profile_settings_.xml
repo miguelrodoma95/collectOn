@@ -61,7 +61,34 @@
                 android:textColor="@color/white"
                 android:hint="User Name"
                 android:textColorHint="@color/GreyMenu"
-                android:layout_weight="0.3"/>
+                android:layout_weight="0.4"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/collectOnBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last Name"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/et_userLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="User Last Name"
+                android:textColorHint="@color/GreyMenu"
+                android:layout_weight="0.4"/>
         </LinearLayout>
 
         <LinearLayout
@@ -88,7 +115,7 @@
                 android:textColor="@color/white"
                 android:hint="User Sex"
                 android:textColorHint="@color/GreyMenu"
-                android:layout_weight="0.3"/>
+                android:layout_weight="0.4"/>
         </LinearLayout>
 
         <LinearLayout
@@ -115,7 +142,7 @@
                 android:textColor="@color/white"
                 android:hint="User email"
                 android:textColorHint="@color/GreyMenu"
-                android:layout_weight="0.3"/>
+                android:layout_weight="0.4"/>
         </LinearLayout>
 
         <LinearLayout
@@ -142,7 +169,7 @@
                 android:textColor="@color/white"
                 android:hint="Country"
                 android:textColorHint="@color/GreyMenu"
-                android:layout_weight="0.3"/>
+                android:layout_weight="0.4"/>
         </LinearLayout>
 
         <LinearLayout
@@ -169,7 +196,7 @@
                 android:textColor="@color/white"
                 android:hint="City"
                 android:textColorHint="@color/GreyMenu"
-                android:layout_weight="0.3"/>
+                android:layout_weight="0.4"/>
         </LinearLayout>
 
         <Button

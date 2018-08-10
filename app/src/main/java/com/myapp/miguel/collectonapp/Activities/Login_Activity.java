@@ -50,7 +50,7 @@ public class Login_Activity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private UserInfo userInfo;
     private Gson gson;
-    private String name, email;
+    private String fName, lName, email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,7 @@ public class Login_Activity extends AppCompatActivity {
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.facebook_button);
         loginButton.setReadPermissions("email", "public_profile");
+
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -78,20 +79,17 @@ public class Login_Activity extends AppCompatActivity {
                 GraphRequest request = GraphRequest.newMeRequest((loginResult.getAccessToken()), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        //getFacebookInfo(object);
                         try{
-                            name = object.getString("name");
+                            fName = object.getString("first_name");
+                            lName = object.getString("last_name");
                             email = object.getString("email");
-                            Log.d("completedInfo name ", name);
-                            Log.d("completedInfo email ", email);
-
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
                     }
                 });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
+                parameters.putString("fields", "id,first_name, last_name,email,gender,birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
                 handleFacebookAccessToken(loginResult.getAccessToken());
@@ -101,21 +99,16 @@ public class Login_Activity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-                // [START_EXCLUDE]
+                Log.e(TAG, "facebook:onCancel");
                 updateUI(null);
-                // [END_EXCLUDE]
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                // [START_EXCLUDE]
+                Log.e(TAG, "facebook:onError", error);
                 updateUI(null);
-                // [END_EXCLUDE]
             }
         });
-        // [END initialize_fblogin]
     }
 
     private void getKeyHash() {
@@ -182,7 +175,8 @@ public class Login_Activity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
 
-            userInfo.setUserName(name);
+            userInfo.setUserName(fName);
+            userInfo.setUserLastName(lName);
             userInfo.setEmail(email);
             userInfo.setUserId(user.getUid());
 

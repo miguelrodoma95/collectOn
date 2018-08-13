@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class UserInfo implements Parcelable{
 
-    private String birth_date, country, email, gender, image_url, userLastName, userName, userId;
+    private String birth_date, country, email, gender, image_url, userLastName, userName;
 
     public UserInfo(){
     }
@@ -22,7 +22,6 @@ public class UserInfo implements Parcelable{
         this.image_url = image_url;
         this.userLastName = userLastName;
         this.userName = userName;
-        this.userId = userId;
     }
 
 
@@ -47,14 +46,6 @@ public class UserInfo implements Parcelable{
             return new UserInfo[size];
         }
     };
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
 
     public void setBirth_date(String birth_date) {
         this.birth_date = birth_date;
@@ -118,6 +109,5 @@ public class UserInfo implements Parcelable{
         dest.writeString(image_url);
         dest.writeString(userLastName);
         dest.writeString(userName);
-        dest.writeString(userId);
     }
 }

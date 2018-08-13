@@ -196,7 +196,6 @@ public class Login_Activity extends AppCompatActivity {
             userInfo.setUserName(fName);
             userInfo.setUserLastName(lName);
             userInfo.setEmail(email);
-            userInfo.setUserId(user.getUid());
 
             saveUserModel();
 

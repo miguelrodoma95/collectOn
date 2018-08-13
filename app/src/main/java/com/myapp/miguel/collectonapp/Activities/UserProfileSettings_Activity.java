@@ -153,15 +153,15 @@ public class UserProfileSettings_Activity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String userName = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userName").getValue(String.class);
-                etUserName.setHint(userName);
+                etUserName.setText(userName);
                 String userLastName =  dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("userLastName").getValue(String.class);
-                etUserLastName.setHint(userLastName);
+                etUserLastName.setText(userLastName);
                 String country = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("country").getValue(String.class);
-                etCountry.setHint(country);
+                etCountry.setText(country);
                 String gender = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("gender").getValue(String.class);
-                etSex.setHint(gender);
+                etSex.setText(gender);
                 String email = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("email").getValue(String.class);
-                etEmail.setHint(email);
+                etEmail.setText(email);
             }
 
             @Override

@@ -129,8 +129,8 @@ public class UserRegister_Activity extends AppCompatActivity {
         DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
         DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
 
-        registerStatusRef.child(userInfo.getUserId()).child("status").setValue("1");
-        userInfoRef.child(userInfo.getUserId()).setValue(userInfo);
+        registerStatusRef.child(mAuth.getCurrentUser().getUid()).child("status").setValue("1");
+        userInfoRef.child(mAuth.getCurrentUser().getUid()).setValue(userInfo);
     }
 
     @Override

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +38,7 @@ public class CollectionsList_Activity extends AppCompatActivity
 
     private Toolbar toolbar = null;
     private NavigationView navigationView;
+    private FirebaseApp userFirebaseApp;
     private SharedPreferences sharedPreferences;
     private String selectedTheme;
     private ListView collectionsListView;
@@ -49,6 +51,8 @@ public class CollectionsList_Activity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collections_list);
+
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
 
         drawerAndToolbarSettings();
 
@@ -160,6 +164,7 @@ public class CollectionsList_Activity extends AppCompatActivity
         LoginManager.getInstance().logOut();
         Intent loginIntent = new Intent(this, Login_Activity.class);
         startActivity(loginIntent);
+        userFirebaseApp.delete();
         finish();
     }
 

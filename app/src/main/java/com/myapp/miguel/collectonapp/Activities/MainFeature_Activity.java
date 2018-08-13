@@ -53,21 +53,11 @@ public class MainFeature_Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature);
 
-        //UserInfo Object
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("userInfo", "");
-        userInfo = gson.fromJson(json, UserInfo.class);
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
 
-        Log.d("pruebaUser", userInfo.getCountry() + " " + userInfo.getBirth_date() + " " + userInfo.getGender()
-                + " " + userInfo.getUserName() + " " + userInfo.getEmail() + " " + userInfo.getUserId());
-
+        userObjectInfo();
         drawerAndToolbarViewContents();
-
-        completeListFragment = new CompleteListFragment();
-        myCollectionFragment = new MyCollectionFragment();
-        exchangeFragment = new ExchangeFragment();
-        communityFragment = new CommunityFragment();
+        fragmentInit();
 
         if (savedInstanceState == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -78,16 +68,18 @@ public class MainFeature_Activity extends AppCompatActivity
         bottomNavigationBar();
     }
 
-    private void userCollectionsFirebaseDatabase() {
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
-                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
-                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
-                .build();
-        FirebaseApp.initializeApp(this, options, "secondary");
+    private void fragmentInit() {
+        completeListFragment = new CompleteListFragment();
+        myCollectionFragment = new MyCollectionFragment();
+        exchangeFragment = new ExchangeFragment();
+        communityFragment = new CommunityFragment();
+    }
 
-        userFirebaseApp = FirebaseApp.getInstance("secondary");
-        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
+    private void userObjectInfo() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("userInfo", "");
+        userInfo = gson.fromJson(json, UserInfo.class);
     }
 
     private void drawerAndToolbarViewContents() {
@@ -176,6 +168,7 @@ public class MainFeature_Activity extends AppCompatActivity
         LoginManager.getInstance().logOut();
         Intent loginIntent = new Intent(this, Login_Activity.class);
         startActivity(loginIntent);
+        userFirebaseApp.delete();
         finish();
     }
 }

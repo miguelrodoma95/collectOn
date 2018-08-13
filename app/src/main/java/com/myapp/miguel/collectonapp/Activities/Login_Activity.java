@@ -25,11 +25,14 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.myapp.miguel.collectonapp.Model.UserInfo;
 import com.myapp.miguel.collectonapp.R;
@@ -47,6 +50,8 @@ public class Login_Activity extends AppCompatActivity {
 
     private static final String TAG = "FacebookLogin";
     private FirebaseAuth mAuth;
+    private FirebaseDatabase secondaryDatabase;
+    private FirebaseApp userFirebaseApp;
     private CallbackManager mCallbackManager;
     private UserInfo userInfo;
     private Gson gson;
@@ -58,7 +63,8 @@ public class Login_Activity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-       getKeyHash();
+        userCollectionsFirebaseDatabase();
+        getKeyHash();
 
         userInfo = new UserInfo();
         // [START initialize_auth]
@@ -109,6 +115,18 @@ public class Login_Activity extends AppCompatActivity {
                 updateUI(null);
             }
         });
+    }
+
+    private void userCollectionsFirebaseDatabase() {
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
+                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
+                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
+                .build();
+        FirebaseApp.initializeApp(this, options, "secondary");
+
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
     }
 
     private void getKeyHash() {

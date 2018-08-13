@@ -59,6 +59,8 @@ public class ItemsList_Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_list_);
 
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
+
         collectionList = new ArrayList<ItemsList_Activity.Item>();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         selectedCollection = sharedPreferences.getString("selectedCollection", " ");
@@ -195,6 +197,7 @@ public class ItemsList_Activity extends AppCompatActivity
         LoginManager.getInstance().logOut();
         Intent loginIntent = new Intent(this, Login_Activity.class);
         startActivity(loginIntent);
+        userFirebaseApp.delete();
         finish();
     }
 

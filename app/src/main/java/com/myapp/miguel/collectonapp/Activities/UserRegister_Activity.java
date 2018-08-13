@@ -65,7 +65,6 @@ public class UserRegister_Activity extends AppCompatActivity {
         userInfo = gson.fromJson(json, UserInfo.class);
 
         setViewElements();
-        userCollectionsFirebaseDatabase();
         countrySelection();
         calendarPupUpSelectBirthdate();
         DoneButton();
@@ -123,6 +122,10 @@ public class UserRegister_Activity extends AppCompatActivity {
     }
 
     private void addInfoToDatabase() {
+
+        userFirebaseApp = FirebaseApp.getInstance("secondary");
+        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
+
         DatabaseReference registerStatusRef = secondaryDatabase.getReference("register_process");
         DatabaseReference userInfoRef = secondaryDatabase.getReference("users");
 
@@ -216,18 +219,6 @@ public class UserRegister_Activity extends AppCompatActivity {
         etBirthdate.setText(sdf.format(myCalendar.getTime()));
         stUserBirthdate = etBirthdate.getText().toString();
         userInfo.setBirth_date(stUserBirthdate);
-    }
-
-    private void userCollectionsFirebaseDatabase() {
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId("1:87906663366:android:717d3ee683a9390e") // Required for Analytics.
-                .setApiKey("AIzaSyA8muv77PUHFuk95K48RSGMCe441nHbvEI ") // Required for Auth.
-                .setDatabaseUrl("https://collectonusers.firebaseio.com/") // Required for RTDB.
-                .build();
-        FirebaseApp.initializeApp(this, options, "secondary");
-
-        userFirebaseApp = FirebaseApp.getInstance("secondary");
-        secondaryDatabase = FirebaseDatabase.getInstance(userFirebaseApp);
     }
 
     public void signOut() {

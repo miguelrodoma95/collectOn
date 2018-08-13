@@ -51,7 +51,9 @@
             android:name=".Activities.UserProfileSettings_Activity"
             android:label="@string/title_activity_user_profile_settings_"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.MyOwnCollectionsThemes_Activity"></activity>
+        <activity android:name=".Activities.MyOwnCollectionsThemes_Activity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>
